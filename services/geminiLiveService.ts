@@ -1,5 +1,11 @@
 
-import { GoogleGenAI, LiveSession as GenAILiveSession, LiveServerMessage, Modality, Blob, Content } from "@google/genai";
+import {
+  GoogleGenAI,
+  LiveServerMessage,
+  Modality,
+  Blob,
+  Content
+} from "@google/genai";
 import { encode, decode, decodeAudioData } from './audioUtils';
 
 interface LiveSessionCallbacks {
@@ -12,7 +18,7 @@ interface LiveSessionCallbacks {
 
 export class LiveSession {
     private ai: GoogleGenAI;
-    private sessionPromise: Promise<GenAILiveSession> | null = null;
+    private sessionPromise: Promise<any> | null = null;
     private stream: MediaStream | null = null;
     private inputAudioContext: AudioContext | null = null;
     private outputAudioContext: AudioContext;
@@ -24,10 +30,16 @@ export class LiveSession {
 
     constructor(callbacks: LiveSessionCallbacks) {
         this.callbacks = callbacks;
-        if (!process.env.API_KEY) {
-            throw new Error("API Key is not available. Please select one.");
-        }
-        this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+        console.log("[ENV] has gemini key?", Boolean(apiKey), "len:", apiKey?.length);
+
+
+if (!apiKey) {
+  throw new Error("נדרש מפתח API להמשך עבודה");
+}
+
+this.ai = new GoogleGenAI({ apiKey });
+
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         this.outputAudioContext = new AudioContext({ sampleRate: 24000 });
     }
