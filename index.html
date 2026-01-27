@@ -1,0 +1,124 @@
+
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>StudioPlayAI – AI Image & Video Editor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Arimo:wght@400;700&family=Assistant:wght@400;600;700&family=David+Libre:wght@400;500;700&family=Frank+Ruhl+Libre:wght@400;500;700&family=Karantina:wght@700&family=Miriam+Libre:wght@400;700&family=Rubik:wght@400;500;700&family=Secular+One&family=Tinos:wght@400;700&family=Varela+Round&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Assistant', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Arial', '"Noto Sans Hebrew"'],
+          },
+          colors: {
+            'brand-yellow': '#F2C94C',
+            'brand-pink': '#EC4899',
+            'brand-orange': '#F97316',
+            'panel-dark': '#191A29',
+            'panel-light': '#24263D',
+            'panel-border': 'rgba(137, 147, 191, 0.15)',
+            'panel-selected': 'rgba(242, 201, 76, 0.1)',
+            'panel-selected-border': '#F2C94C',
+          },
+          backgroundImage: {
+            'brand-gradient': 'linear-gradient(90deg, #D65393 0%, #F48750 100%)',
+            'button-gradient': 'linear-gradient(90deg, #A855F7 0%, #EC4899 100%)',
+          },
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-image:
+        radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
+        radial-gradient(at 98% 99%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+      background-color: #0D0E1B;
+    }
+    .workspace-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23191A29' fill-opacity='0.6' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #24263D;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3d63;
+    }
+    @media print {
+      body, html {
+        background: white !important;
+        color: black !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #strategy-print-area, #strategy-print-area * {
+        visibility: visible;
+      }
+      #strategy-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: black !important;
+      }
+      .print-hidden {
+        display: none !important;
+      }
+      .print-card {
+        border: 1px solid #ddd !important;
+        background: #f9f9f9 !important;
+        page-break-inside: avoid;
+      }
+      .print-text-color {
+        color: black !important;
+      }
+      .print-header-color {
+        color: #333 !important;
+      }
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "framer-motion": "https://esm.sh/framer-motion@^11.3.19",
+    "firebase/app": "https://esm.sh/firebase@10.12.2/app",
+    "firebase/auth": "https://esm.sh/firebase@10.12.2/auth",
+    "firebase/": "https://esm.sh/firebase@^12.7.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-[#0D0E1B] text-gray-100 font-sans">
+  <div id="root"></div>
+  <script>
+    console.log("HASH DEBUG:", location.href, "hash=", JSON.stringify(location.hash));
+
+    if (location.hash === "#" || location.hash === "#/") {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

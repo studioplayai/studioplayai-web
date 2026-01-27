@@ -1,0 +1,7 @@
+{
+  "name": "StudioPlayAI - AI Image & Video Editor",
+  "description": "An advanced AI-powered editor for images and videos, designed for content creators and businesses. It offers various categories for professional results, including background removal, quality enhancement, social media content creation, and more.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
