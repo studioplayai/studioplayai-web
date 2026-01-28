@@ -74,7 +74,7 @@ export default function UserMenu({ user, onLogout, className }: Props) {
         >
           {initials}
         </div>
-<span style={{ fontSize: 11, opacity: 0.6 }}>← USER MENU DEBUG</span>
+
 
         <div
           style={{
