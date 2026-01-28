@@ -149,14 +149,16 @@ export const cropImage = (base64Data: string, mimeType: string, targetAspectRati
 };
 
 export const checkAndGetApiKey = async () => {
-    if (window.aistudio) {
-        const hasKey = await window.aistudio.hasSelectedApiKey();
-        if (!hasKey) {
-            await window.aistudio.openSelectKey();
-        }
+  if (window.aistudio) {
+    const hasKey = await window.aistudio.hasSelectedApiKey();
+    if (!hasKey) {
+      await window.aistudio.openSelectKey();
     }
-    return process.env.API_KEY;
+  }
+
+  return import.meta.env.VITE_GEMINI_API_KEY;
 };
+
 
 export const generateContent = async (prompt: string, mediaParts: Part[], mediaType: string, settings: Record<string, any>, toolId?: string) => {
     // Re-check and potentially open key selector right before use, especially for video
