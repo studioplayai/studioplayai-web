@@ -30,13 +30,7 @@ export class LiveSession {
 
     constructor(callbacks: LiveSessionCallbacks) {
         this.callbacks = callbacks;
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-        console.log("[ENV] has gemini key?", Boolean(apiKey), "len:", apiKey?.length);
-
-
-if (!apiKey) {
-  throw new Error("נדרש מפתח API להמשך עבודה");
-}
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 
 this.ai = new GoogleGenAI({ apiKey });
 
