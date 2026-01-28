@@ -175,16 +175,30 @@ const ControlsSidebar: React.FC<ControlsSidebarProps> = (props) => {
         props.onGenerate(props.selectedTool.prompt, settingsWithNiche, props.files, props.selectedTool.media);
     };
 
-    const handleCategorySelect = (category: ToolCategory) => {
-        setActiveCategory(category);
-        if (category === ToolCategory.Video || category === ToolCategory.StyleStudio) {
-            return;
-        }
-        const firstTool = props.tools.find(t => t.category === category);
-        if (firstTool) {
-            props.onSelectTool(firstTool.id);
-        }
-    };
+   const handleCategorySelect = (category: ToolCategory) => {
+  console.log("CATEGORY CLICK:", category);
+  setActiveCategory(category);
+
+  // Video – הקטגוריה מטפלת לבד, לא נוגעים ב-selectedTool
+  if (category === ToolCategory.Video) return;
+
+  // AI Style Studio – לבחור Tool עם media: "image"
+  if (category === ToolCategory.StyleStudio) {
+    const imageTool = props.tools.find(
+      (t) => t.category === ToolCategory.StyleStudio && t.media === "image"
+    );
+
+    console.log("StyleStudio imageTool:", imageTool);
+
+    if (imageTool) props.onSelectTool(imageTool.id);
+    return;
+  }
+
+  // שאר הקטגוריות – בוחרים את הכלי הראשון
+  const firstTool = props.tools.find((t) => t.category === category);
+  if (firstTool) props.onSelectTool(firstTool.id);
+};
+
 
 
     const visibleTools = props.tools.filter(t => t.category === activeCategory);

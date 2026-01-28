@@ -96,8 +96,9 @@ export const loginWithSocial = async (provider: 'google' | 'apple'): Promise<Use
 
   const redirectTo =
   typeof window !== "undefined"
-    ? `${window.location.origin}${window.location.pathname}${window.location.hash || "#/app"}`
+    ? `${window.location.origin}/#/app`
     : undefined;
+
 
 
 

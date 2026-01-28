@@ -7,6 +7,8 @@ import ControlsSidebar from './ControlsSidebar';
 import Header from './Header';
 import FloatingToolbar from './FloatingToolbar';
 import MobileBottomNav from './MobileBottomNav';
+import UserMenu from "./UserMenu";
+
 
 interface EditorLayoutProps {
     user: AuthUser;
@@ -67,6 +69,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
 
     return (
         <div className="flex h-screen w-full flex-col overflow-hidden bg-[#0D0E1B] text-gray-200 selection:bg-purple-500/30">
+        
+
             <Header 
                 onToggleGallery={toggleGallery} 
                 user={props.user} 
@@ -105,6 +109,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
                     <div className="flex-1 relative flex items-center justify-center overflow-hidden bg-black/40 backdrop-blur-sm rounded-3xl border border-white/5 shadow-2xl">
                         <FloatingToolbar isVisible={hasContent && !props.isLoading} />
                         <Workspace
+                            key={`${props.selectedTool?.media}-${props.selectedTool?.name}`}
                             isLoading={props.isLoading}
                             result={props.result}
                             selectedTool={props.selectedTool}

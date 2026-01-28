@@ -6,6 +6,8 @@ import IconLightning from './common/IconLightning';
 import IconUser from './common/IconUser';
 import IconLogout from './common/IconLogout';
 import { AuthUser } from '../types';
+import UserMenu from "./UserMenu";
+
 
 interface HeaderProps {
     onToggleGallery: () => void;
@@ -25,6 +27,9 @@ const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGall
 
             {/* Left side in RTL (User Actions & Gallery) */}
             <div className="flex items-center gap-2 md:gap-4">
+                <UserMenu user={user} onLogout={onLogout} />
+
+                
                 <div className="hidden lg:flex items-center gap-2 rounded-lg bg-panel-light px-3 py-1.5">
                     <span className="text-sm font-semibold text-gray-300">קרדיטים:</span>
                     <span className="font-bold text-white">999999</span>
