@@ -2,12 +2,17 @@ import React, { useMemo, useRef, useState, useEffect } from "react";
 import { AuthUser } from "../types";
 
 type Props = {
-  user: AuthUser;
+  user: any;
+  onOpenAccount: () => void;
   onLogout: () => void;
-  className?: string;
+  className: string;
 };
 
-export default function UserMenu({ user, onLogout, className }: Props) {
+
+export default function UserMenu({ user, onOpenAccount, onLogout, className }: Props) {
+
+
+
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,7 +41,27 @@ export default function UserMenu({ user, onLogout, className }: Props) {
   }, []);
 
   // אם אין אימייל (לא מחובר) — לא מציגים תפריט
-  if (!email) return null;
+  if (!email) {
+  return (
+    <div
+      ref={rootRef}
+      className={className}
+      style={{ position: "relative", display: "flex", alignItems: "center" }}
+    >
+      <button
+        onClick={() => {
+          setOpen(false);
+          onOpenAccount();
+        }}
+        className="h-10 w-10 rounded-full border border-white/10 bg-white/5 text-white font-bold flex items-center justify-center"
+      >
+        ST
+      </button>
+    </div>
+  );
+}
+
+
 
   return (
     <div
@@ -45,7 +70,16 @@ export default function UserMenu({ user, onLogout, className }: Props) {
       style={{ position: "relative", display: "flex", alignItems: "center" }}
     >
       <button
-        onClick={() => setOpen((v) => !v)}
+  onClick={() => {
+  setOpen(false);
+  console.log("ST CLICKED");
+  if (onOpenAccount) {
+    onOpenAccount();
+  } else {
+    console.warn("onOpenAccount is missing");
+  }
+}}
+
         style={{
           display: "flex",
           alignItems: "center",
@@ -58,6 +92,7 @@ export default function UserMenu({ user, onLogout, className }: Props) {
         }}
         aria-label="User menu"
       >
+
         <div
           style={{
             width: 28,
@@ -135,27 +170,27 @@ export default function UserMenu({ user, onLogout, className }: Props) {
           />
 
           <button
-            onClick={() => {
-              setOpen(false);
-              onLogout();
-            }}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 10,
-              padding: "10px 10px",
-              borderRadius: 12,
-              border: "1px solid rgba(255,255,255,0.14)",
-              background: "rgba(255,255,255,0.06)",
-              cursor: "pointer",
-              fontSize: 13,
-            }}
-          >
-            <span>התנתקות</span>
-            <span style={{ opacity: 0.7 }}>↪</span>
-          </button>
+  onClick={() => {
+    setOpen(false);
+    onOpenAccount();
+  }}
+  style={{
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+    padding: "10px 10px",
+    borderRadius: 12,
+    border: "1px solid rgba(255,255,255,0.14)",
+    background: "rgba(255,255,255,0.06)",
+    cursor: "pointer",
+    fontSize: 13,
+  }}
+>
+  <span>האזור האישי</span>
+</button>
+
 
           <div style={{ padding: "8px 10px 2px 10px", fontSize: 11, opacity: 0.6 }}>
             בקרוב: חשבון, חבילה, קרדיטים

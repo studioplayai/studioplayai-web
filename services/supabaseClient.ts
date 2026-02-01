@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Direct configuration (since .env is not available in AI Studio)
-const SUPABASE_URL = 'https://hxdvszjoaicluogpoidl.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4ZHZzempvYWljbHVvZ3BvaWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5NzgyOTMsImV4cCI6MjA4MTU1NDI5M30.km2w5bKc6TdwU4JvFFcxWR-6eErKm82YjDPUMH1v4Fs'
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 /**
 * Robust check for Supabase configuration.

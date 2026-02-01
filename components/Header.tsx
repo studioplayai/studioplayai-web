@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState } from "react";
+
 import Button from './common/Button';
 import IconClock from './common/IconClock';
 import IconLightning from './common/IconLightning';
@@ -17,6 +18,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGalleryOpen }) => {
+    const [isAccountOpen, setIsAccountOpen] = useState(false);
+
     return (
         <header className="flex h-14 md:h-16 w-full flex-shrink-0 items-center justify-between border-b border-panel-border bg-panel-dark px-3 md:px-6 z-30">
             {/* Right side in RTL (Logo & Title) */}
@@ -27,7 +30,9 @@ const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGall
 
             {/* Left side in RTL (User Actions & Gallery) */}
             <div className="flex items-center gap-2 md:gap-4">
-                <UserMenu user={user} onLogout={onLogout} />
+              
+
+
 
                 
                 <div className="hidden lg:flex items-center gap-2 rounded-lg bg-panel-light px-3 py-1.5">
@@ -46,16 +51,60 @@ const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGall
                      <IconClock className="h-4 w-4 ml-2" />
                      הגלריה שלי
                  </Button>
-                 <Button onClick={onLogout} variant="ghost" className="!px-2 !py-1 h-8 md:h-auto hidden sm:inline-flex">
-                     <IconLogout className="h-4 w-4 ml-1 md:ml-2" />
-                     <span className="hidden md:inline">התנתק</span>
-                 </Button>
+                 <Button
+  type="button"
+  variant="ghost"
+  className="!px-2 !py-1 h-8 md:h-auto hidden sm:inline-flex"
+  onClick={async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("LOGOUT CLICK");
+    await onLogout?.();
+  }}
+>
+  <IconLogout className="h-4 w-4 ml-1 md:ml-2" />
+  <span className="hidden md:inline">התנתק</span>
+</Button>
+
                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 font-bold text-white flex items-center justify-center text-sm md:text-lg">
-                        AD
-                    </div>
-                </div>
+  <button
+  onClick={() => {
+    console.log("AVATAR CLICK");   // 👈 שורה זו להוסיף
+    setIsAccountOpen(true);
+  }}
+  className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 font-bold text-white flex items-center justify-center"
+  title="האזור האישי"
+>
+  {(user?.email?.[0] || "").toUpperCase()}
+  {(user?.email?.[1] || "").toUpperCase()}
+</button>
+
+</div>
+
             </div>
+            {isAccountOpen && (
+  <div
+    className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center"
+    onClick={() => setIsAccountOpen(false)}
+  >
+    <div
+      className="bg-panel-dark rounded-xl p-6 w-[320px]"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2 className="text-lg font-bold mb-4">האזור האישי</h2>
+
+      <div className="text-sm text-gray-300 mb-4">
+        {user?.email ?? ""}
+
+      </div>
+
+      <Button onClick={onLogout} className="w-full">
+        התנתק
+      </Button>
+    </div>
+  </div>
+)}
+
         </header>
     );
 };
