@@ -234,12 +234,30 @@ Integrate the text naturally. The output must be a high-quality image with the g
     };
 
     const handleLogout = async () => {
-        try {
-            await logout();
-        } catch (error) {
-            setToast({ message: 'ההתנתקות נכשלה.', type: 'error'});
-        }
-    };
+  console.log("HEADER LOGOUT");
+
+  try {
+    // ניתוק Supabase
+    await supabase.auth.signOut();
+  } catch (e) {
+    console.error("Supabase signOut failed", e);
+  }
+
+  // ניקוי אגרסיבי של session
+  try {
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith("sb-"))
+      .forEach((k) => localStorage.removeItem(k));
+
+    Object.keys(sessionStorage)
+      .filter((k) => k.startsWith("sb-"))
+      .forEach((k) => sessionStorage.removeItem(k));
+  } catch {}
+
+  // חזרה לנחיתה
+  window.location.href = "/";
+};
+
     
     if (authLoading) {
         return (
