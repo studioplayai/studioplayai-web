@@ -112,7 +112,16 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
         }
     };
 
-    if (!user) return null;
+    if (!user) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="rounded-2xl bg-slate-900 p-6 text-white">
+        טוען משתמש...
+      </div>
+    </div>
+  );
+}
+
     
 
 
