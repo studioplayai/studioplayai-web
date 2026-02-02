@@ -96,16 +96,26 @@ const isAdmin =
 
             </div>
            {isAdmin && (
-  <div
-    onClick={() => {
-  setIsAdminOpen(true);
-}}
-
-
+  <button
+    onClick={() => setIsAdminOpen(true)}
+    className="
+      flex items-center gap-2
+      px-4 py-2
+      rounded-2xl
+      border border-red-500/40
+      text-red-400
+      bg-red-500/10
+      hover:bg-red-500/20
+      font-bold text-sm
+      transition
+    "
   >
-    ADMIN PANEL
-  </div>
+    <span className="text-red-400">ADMIN PANEL</span>
+    <span className="opacity-80">🛡️</span>
+  </button>
 )}
+
+
 
 {isAdminOpen && (
   <>
