@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-
+import { MyAccountModal } from "./MyAccountModal";
 import Button from './common/Button';
 import IconClock from './common/IconClock';
 import IconLightning from './common/IconLightning';
@@ -19,6 +19,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGalleryOpen }) => {
     const [isAccountOpen, setIsAccountOpen] = useState(false);
+
+      console.log("HEADER render", {
+  isAccountOpen,
+  userEmail: user?.email,
+});
+
+
 
     return (
         <header className="flex h-14 md:h-16 w-full flex-shrink-0 items-center justify-between border-b border-panel-border bg-panel-dark px-3 md:px-6 z-30">
@@ -82,28 +89,13 @@ const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGall
 </div>
 
             </div>
-            {isAccountOpen && (
-  <div
-    className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center"
-    onClick={() => setIsAccountOpen(false)}
-  >
-    <div
-      className="bg-panel-dark rounded-xl p-6 w-[320px]"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h2 className="text-lg font-bold mb-4">האזור האישי</h2>
+           <MyAccountModal
+  isOpen={isAccountOpen}
+  user={user as any}
+  onClose={() => setIsAccountOpen(false)}
+  onLogout={onLogout}
+/>
 
-      <div className="text-sm text-gray-300 mb-4">
-        {user?.email ?? ""}
-
-      </div>
-
-      <Button onClick={onLogout} className="w-full">
-        התנתק
-      </Button>
-    </div>
-  </div>
-)}
 
         </header>
     );
