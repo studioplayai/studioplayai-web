@@ -99,14 +99,35 @@ const isAdmin =
 </div>
 
             </div>
-            {isAdmin && (
-  <button
-    onClick={() => setIsAdminOpen(true)}
-    className="px-3 py-1.5 rounded-xl border border-red-500/40 text-red-300 hover:bg-red-500/10 font-bold text-sm"
+           {isAdmin && (
+  <div
+    onClick={() => {
+  console.log("ADMIN CLICK");
+  setIsAdminOpen(true);
+}}
+
+    style={{
+      cursor: "pointer",
+      zIndex: 999999,
+      position: "relative",
+      padding: "6px 12px",
+      border: "1px solid red",
+      color: "red",
+      fontWeight: "bold",
+    }}
   >
     ADMIN PANEL
-  </button>
+  </div>
 )}
+
+{isAdminOpen && (
+  <>
+    {console.log('ADMIN DASHBOARD OPEN')}
+    <AdminDashboard onClose={() => setIsAdminOpen(false)} />
+  </>
+)}
+
+
 
            <MyAccountModal
   isOpen={isAccountOpen}
@@ -114,6 +135,27 @@ const isAdmin =
   onClose={() => setIsAccountOpen(false)}
   onLogout={onLogout}
 />
+
+{isAdminOpen && (
+  <AdminDashboard onClose={() => setIsAdminOpen(false)} />
+)}
+{isAdminOpen && (
+  <div
+    style={{
+      position: "fixed",
+      top: 20,
+      left: 20,
+      zIndex: 999999,
+      background: "yellow",
+      color: "black",
+      padding: "8px 12px",
+      fontWeight: 800,
+      borderRadius: 8,
+    }}
+  >
+    ADMIN OPEN = TRUE
+  </div>
+)}
 
 
         </header>
