@@ -109,7 +109,15 @@ export const AdminDashboard: React.FC<{ onClose: () => void }> = ({ onClose }) =
     const displayedUsers = filterActiveOnly ? activeUsers : users;
 
     return (
-        <div className="fixed inset-0 bg-slate-950 z-50 overflow-y-auto font-heebo text-slate-200">
+  <div className="fixed inset-0 z-[999999] bg-slate-950/95 overflow-y-auto">
+    <button
+      onClick={onClose}
+      className="fixed top-4 left-4 z-[1000000] text-white/70 hover:text-white text-2xl"
+      aria-label="Close admin panel"
+>
+  ✕
+</button>
+
             <div className="fixed left-0 top-0 bottom-0 w-64 bg-slate-900 border-r border-white/5 p-6 hidden md:flex flex-col">
                 <div className="flex items-center gap-2 mb-10">
                     <div className="w-8 h-8 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
