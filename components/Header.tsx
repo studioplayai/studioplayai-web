@@ -30,11 +30,7 @@ const isAdmin =
   user?.email === "michalasri.shivuk@gmail.com";
 
 
-      console.log("HEADER render", {
-  isAccountOpen,
-  userEmail: user?.email,
-});
-
+    
 
 
     return (
@@ -102,19 +98,10 @@ const isAdmin =
            {isAdmin && (
   <div
     onClick={() => {
-  console.log("ADMIN CLICK");
   setIsAdminOpen(true);
 }}
 
-    style={{
-      cursor: "pointer",
-      zIndex: 999999,
-      position: "relative",
-      padding: "6px 12px",
-      border: "1px solid red",
-      color: "red",
-      fontWeight: "bold",
-    }}
+
   >
     ADMIN PANEL
   </div>
@@ -139,23 +126,7 @@ const isAdmin =
 {isAdminOpen && (
   <AdminDashboard onClose={() => setIsAdminOpen(false)} />
 )}
-{isAdminOpen && (
-  <div
-    style={{
-      position: "fixed",
-      top: 20,
-      left: 20,
-      zIndex: 999999,
-      background: "yellow",
-      color: "black",
-      padding: "8px 12px",
-      fontWeight: 800,
-      borderRadius: 8,
-    }}
-  >
-    ADMIN OPEN = TRUE
-  </div>
-)}
+
 
 
         </header>
