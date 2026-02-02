@@ -8,6 +8,8 @@ import IconUser from './common/IconUser';
 import IconLogout from './common/IconLogout';
 import { AuthUser } from '../types';
 import UserMenu from "./UserMenu";
+import AdminDashboard from "./AdminDashboard";
+
 
 
 interface HeaderProps {
@@ -19,6 +21,14 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGalleryOpen }) => {
     const [isAccountOpen, setIsAccountOpen] = useState(false);
+    const [isAdminOpen, setIsAdminOpen] = useState(false);
+    
+
+
+const isAdmin =
+  user?.email === "admin@studioplay.ai" ||
+  user?.email === "michalasri.shivuk@gmail.com";
+
 
       console.log("HEADER render", {
   isAccountOpen,
@@ -89,6 +99,15 @@ const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGall
 </div>
 
             </div>
+            {isAdmin && (
+  <button
+    onClick={() => setIsAdminOpen(true)}
+    className="px-3 py-1.5 rounded-xl border border-red-500/40 text-red-300 hover:bg-red-500/10 font-bold text-sm"
+  >
+    ADMIN PANEL
+  </button>
+)}
+
            <MyAccountModal
   isOpen={isAccountOpen}
   user={user as any}
