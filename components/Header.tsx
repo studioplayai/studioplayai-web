@@ -29,6 +29,12 @@ const isAdmin =
   user?.email === "admin@studioplay.ai" ||
   user?.email === "michalasri.shivuk@gmail.com";
 
+const handleBuyCredits = (plan: string) => {
+  console.log("BUY PLAN FROM ACCOUNT:", plan);
+
+  // שלב הבא: redirect ל-LemonSqueezy
+  // window.location.href = CHECKOUT_URL
+};
 
     
 
@@ -50,7 +56,11 @@ const isAdmin =
                 
                 <div className="hidden lg:flex items-center gap-2 rounded-lg bg-panel-light px-3 py-1.5">
                     <span className="text-sm font-semibold text-gray-300">קרדיטים:</span>
-                    <span className="font-bold text-white">999999</span>
+                    console.log("HEADER USER:", user?.email, user?.credits, user);
+
+                   <span className="font-bold text-white">{user?.credits ?? 0}
+</span>
+
                     <IconLightning className="h-4 w-4 text-yellow-400" />
                 </div>
                  <div className="hidden sm:flex items-center gap-2 rounded-lg bg-panel-light px-2 md:px-3 py-1.5">
@@ -126,12 +136,13 @@ const isAdmin =
 
 
 
-           <MyAccountModal
+          <MyAccountModal
   isOpen={isAccountOpen}
-  user={user as any}
+  user={user}
   onClose={() => setIsAccountOpen(false)}
-  onLogout={onLogout}
+  onBuyPlan={handleBuyCredits}
 />
+
 
 {isAdminOpen && (
   <AdminDashboard onClose={() => setIsAdminOpen(false)} />

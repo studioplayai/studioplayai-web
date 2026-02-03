@@ -146,7 +146,7 @@ export const login = async (email: string, name?: string): Promise<User> => {
                     email,
                     name: displayName,
                     role: isAdmin ? 'admin' : 'user',
-                    credits: isAdmin ? 999999 : 3,
+                    credits: existingUser?.credits ?? 3,
                     plan: isAdmin ? 'agency' : 'free',
                     joinedAt: Date.now()
                 };
@@ -185,7 +185,7 @@ const createLocalUser = (email: string, name: string): User => {
     email,
     name,
     role: admin ? "admin" : "user",
-    credits: admin ? 999999 : 3,
+    credits: 3,
     plan: admin ? "agency" : "free",
     joinedAt: Date.now(),
   };
