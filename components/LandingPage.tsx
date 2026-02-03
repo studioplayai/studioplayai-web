@@ -13,6 +13,8 @@ import IconShield from './common/IconShield';
 import IconType from './common/IconType';
 import IconImage from './common/IconImage';
 import BeforeAfterSlider from './common/BeforeAfterSlider';
+import PricingSection from "./PricingSection";
+
 
 
 const LandingPage: React.FC = () => {
@@ -310,6 +312,7 @@ const LandingPage: React.FC = () => {
                     </div>
                 </div>
             </section>
+<PricingSection />
 
             {/* 6. Social Proof */}
             <section className="px-6 py-32 bg-white/[0.02]">

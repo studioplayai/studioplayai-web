@@ -36,18 +36,30 @@ type Transaction = {
 
 interface MyAccountModalProps {
   isOpen: boolean;
+  user: any;
   onClose: () => void;
-  user: User;
-  onLogout?: () => void;
+  onBuyPlan?: (plan: string) => void;   // נשאיר אופציונלי
+  onOpenPricing?: () => void;           // חדש ✅
 }
+
+
 
 
 export const MyAccountModal: React.FC<MyAccountModalProps> = ({
   isOpen,
   user,
   onClose,
-  onLogout
+  onBuyPlan,
+  onOpenPricing,
 }) => {
+
+
+
+    console.log("MyAccountModal render:", {
+  isOpen,
+  user,
+});
+
 
   if (!isOpen) return null;
  
@@ -157,11 +169,21 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
         user={user}
         onClose={onClose}
         onLogout={() => {
-          onLogout?.();
+        
           onClose();
         }}
         onUserUpdate={() => {}}
-        onBuyMore={() => {}}
+        onBuyMore={() => {
+  onClose(); // סוגר את האזור האישי
+
+  requestAnimationFrame(() => {
+    document
+      .getElementById("pricing")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}}
+
+
         language="he"
       />
     </div>

@@ -10,6 +10,11 @@ import LandingPage from './components/LandingPage';
 import Spinner from './components/common/Spinner';
 import MediaActionsModal from './components/MediaActionsModal';
 import { supabase } from "./services/supabaseClient";
+import { ensureProfileWithFreeCredits, getUserById } from './services/authService';
+
+
+
+
 
 
 const App: React.FC = () => {
@@ -25,6 +30,20 @@ const App: React.FC = () => {
     
     // New state for download/share modal
     const [activeMediaAction, setActiveMediaAction] = useState<GalleryItem | null>(null);
+
+    // 🔐 Pricing / Checkout
+const [showPricing, setShowPricing] = useState(false);
+const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+
+const openPricing = (plan?: string | null) => {
+  setSelectedPlan(plan ?? null);
+  setShowPricing(true);
+};
+
+const closePricing = () => {
+  setShowPricing(false);
+};
+
     useEffect(() => {
 
     // ניקוי hash ריק (#) או hash שווה "#/" כדי שה-URL יהיה נקי
@@ -71,17 +90,32 @@ if (window.location.hash === "#" || window.location.hash === "#/") {
 
     useEffect(() => {
         
-        supabase.auth.getSession().then(({ data }) => {
+        supabase.auth.getSession().then(async ({ data }) => {
   const sUser = data.session?.user;
+
   if (sUser) {
+    await ensureProfileWithFreeCredits({
+      id: sUser.id,
+      email: sUser.email ?? null,
+    });
+
+    const full = await getUserById(sUser.id);
+
+
     setUser({
       uid: sUser.id,
       email: sUser.email ?? null,
+      role: full?.role ?? "user",
+      credits: full?.credits ?? 3,
+      plan: full?.plan ?? "free",
       emailVerified: true as any,
     } as any);
   }
+
   setAuthLoading(false);
 });
+
+
 return; // ⛔
         const unsubscribe = authStateObserver((firebaseUser) => {
             if (firebaseUser) {

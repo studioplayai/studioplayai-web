@@ -18,7 +18,16 @@ const normalizePlan = (p: any): User["plan"] => {
 
 
 const CURRENT_USER_KEY = 'studioplay_current_user_v1';
-export const ADMIN_EMAIL = 'admin@studioplay.ai';
+const ADMIN_EMAILS = new Set([
+  "michalasri.shivuk@gmail.com",
+  "admin@studioplay.ai",
+]);
+
+const isAdminEmail = (email?: string | null): boolean => {
+  if (!email) return false;
+  return ADMIN_EMAILS.has(email.toLowerCase());
+};
+
 
 const isIgnorableError = (e: any): boolean => {
     const msg = String(e?.message || e || '').toLowerCase();
@@ -117,7 +126,8 @@ export const loginWithSocial = async (provider: 'google' | 'apple'): Promise<Use
 export const login = async (email: string, name?: string): Promise<User> => {
     await new Promise(resolve => setTimeout(resolve, 800));
     const displayName = name || email.split('@')[0];
-    const isAdmin = email === ADMIN_EMAIL;
+    const isAdmin = isAdminEmail(email)
+
     
     let user: User;
 
@@ -155,25 +165,32 @@ export const login = async (email: string, name?: string): Promise<User> => {
                 };
             }
         } catch (e) {
-            user = createLocalUser(email, displayName, isAdmin);
+            user = createLocalUser(email, displayName)
+
         }
     } else {
-        user = createLocalUser(email, displayName, isAdmin);
+        user = createLocalUser(email, displayName)
+
     }
 
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
     return user;
 };
 
-const createLocalUser = (email: string, name: string, isAdmin: boolean): User => ({
+const createLocalUser = (email: string, name: string): User => {
+  const admin = isAdminEmail(email);
+
+  return {
     id: `local-${Date.now()}`,
     email,
     name,
-    role: isAdmin ? 'admin' : 'user',
-    credits: isAdmin ? 999999 : 3,
-    plan: normalizePlan(isAdmin ? 'agency' : 'free'),
-    joinedAt: Date.now()
-});
+    role: admin ? "admin" : "user",
+    credits: admin ? 999999 : 3,
+    plan: admin ? "agency" : "free",
+    joinedAt: Date.now(),
+  };
+};
+
 
 export const logout = async () => {
     localStorage.removeItem(CURRENT_USER_KEY);
@@ -257,6 +274,29 @@ if (!data) return null; // לא להפיל
         return null;
     }
 };
+
+export async function ensureProfileWithFreeCredits(user: { id: string; email?: string | null }) {
+  const { data: existing, error } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  // אם אין פרופיל — זה משתמש חדש
+  if (!existing) {
+    const { error: insertError } = await supabase.from("profiles").insert({
+      id: user.id,
+      email: user.email ?? null,
+      credits: 3,
+      plan: "free",
+    });
+
+    if (insertError) throw insertError;
+  }
+}
+
 
 export const updateUserCredits = async (userId: string, creditsToAdd: number, plan?: string): Promise<User | null> => {
     const currentUser = getCurrentUser();
@@ -376,4 +416,18 @@ export async function signInWithGoogle() {
 export async function signOut() {
   return await supabase.auth.signOut();
 }
+
+
+export const getUserById = async (userId: string) => {
+  if (!isSupabaseConfigured()) return null;
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) return null;
+  return data;
+};
 
