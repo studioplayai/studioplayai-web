@@ -101,15 +101,17 @@ if (window.location.hash === "#" || window.location.hash === "#/") {
 
     const full = await getUserById(sUser.id);
 
-
-    setUser({
+    const syncedUser = {
       uid: sUser.id,
       email: sUser.email ?? null,
       role: full?.role ?? "user",
       credits: full?.credits ?? 3,
       plan: full?.plan ?? "free",
-      emailVerified: true as any,
-    } as any);
+      emailVerified: true,
+    };
+
+    setUser(syncedUser as any);
+    localStorage.setItem("studioplay_current_user_v1", JSON.stringify(syncedUser));
   }
 
   setAuthLoading(false);
