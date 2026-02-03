@@ -111,7 +111,8 @@ if (window.location.hash === "#" || window.location.hash === "#/") {
     };
 
     setUser(syncedUser as any);
-    localStorage.setItem("studioplay_current_user_v1", JSON.stringify(syncedUser));
+    localStorage.setItem("studioplay_current_user", JSON.stringify(syncedUser));
+
   }
 
   setAuthLoading(false);

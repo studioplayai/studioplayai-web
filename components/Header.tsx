@@ -56,7 +56,7 @@ const handleBuyCredits = (plan: string) => {
                 
                 <div className="hidden lg:flex items-center gap-2 rounded-lg bg-panel-light px-3 py-1.5">
                     <span className="text-sm font-semibold text-gray-300">קרדיטים:</span>
-                    console.log("HEADER USER:", user?.email, user?.credits, user);
+                
 
                    <span className="font-bold text-white">{user?.credits ?? 0}
 </span>
