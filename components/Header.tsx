@@ -31,9 +31,9 @@ const isAdmin =
 
 const handleBuyCredits = (plan: string) => {
   const CHECKOUT_URLS: Record<string, string> = {
-    Basic: "https://studioplayai.lemonsqueezy.com/checkout/buy/08ecbd44-3c38-4f1f-8038-c2a46016da09",
-    pro: "https://studioplayai.lemonsqueezy.com/checkout/buy/31fd827e-d92b-4aaf-96b6-bbf560de7a1d",
-    ProMAX: "https://studioplayai.lemonsqueezy.com/checkout/buy/7681543c-94d7-4cfb-acdf-d8951623f5e3",
+    BASIC: "https://studioplayai.lemonsqueezy.com/checkout/buy/08ecbd44-3c38-4f1f-8038-c2a46016da09",
+    PRO: "https://studioplayai.lemonsqueezy.com/checkout/buy/31fd827e-d92b-4aaf-96b6-bbf560de7a1d",
+    PROMAX: "https://studioplayai.lemonsqueezy.com/checkout/buy/7681543c-94d7-4cfb-acdf-d8951623f5e3",
   };
 
   const url = CHECKOUT_URLS[plan];

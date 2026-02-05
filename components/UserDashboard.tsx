@@ -15,6 +15,8 @@ interface UserDashboardProps {
     onUserUpdate: (updatedUser: User) => void;
     onBuyMore: () => void;
     language: AppLanguage;
+      onBuyPlan?: (plan: string) => void;
+
 }
 
 export const UserDashboard: React.FC<UserDashboardProps> = ({ 
@@ -23,6 +25,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     onLogout, 
     onUserUpdate,
     onBuyMore,
+    onBuyPlan,
     language 
 }) => {
    
@@ -227,13 +230,18 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             </div>
                             <h3 className="text-slate-400 text-sm font-bold uppercase mb-2">{t('creditsLeft')}</h3>
                             <div className="text-4xl font-black text-white mb-4">{user.credits}</div>
-                            <button 
-                                onClick={onBuyMore}
-                                className="bg-white text-purple-900 px-4 py-2 rounded-xl font-bold text-sm hover:bg-purple-100 transition-colors shadow-lg shadow-purple-900/20 flex items-center gap-2"
-                            >
-                                <span>⚡</span>
- {t('buyCredits')}
-                            </button>
+                            <button
+  onClick={() => {
+  console.log("BUY_CREDITS_CLICK");
+  onBuyMore();
+}}
+
+  className="bg-white text-purple-900 px-4 py-2 rounded-xl font-bold text-sm hover:bg-purple-100 transition-colors shadow-lg shadow-purple-900/20 flex items-center"
+>
+  <span>⚡</span>
+  {t('buyCredits')}
+</button>
+
                         </div>
                     </div>
 
