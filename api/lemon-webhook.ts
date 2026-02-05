@@ -147,12 +147,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   `/rest/v1/profiles?select=id`,
   "POST",
   {
-    id: userId,
-    email: profile.email,
-    credits: newCredits,
-    plan: planInfo.planKey,
-    _prefer: "resolution=merge-duplicates"
-  }
+  id: userId,
+  email: profile.email,
+  credits: newCredits,
+  plan: planInfo.planKey
+}
+
 );
 
 
