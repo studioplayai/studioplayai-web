@@ -232,23 +232,10 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             <div className="text-4xl font-black text-white mb-4">{user.credits}</div>
                             <button
   onClick={() => {
-    console.log("BUY_CREDITS_CLICK");
+  console.log("BUY_CREDITS_CLICK");
+  onBuyMore?.();
+}}
 
-    // בחירת חבילה (Basic / Pro / ProMAX)
-    const picked = window
-      .prompt("Choose plan: Basic / Pro / ProMAX", "Pro")
-      ?.trim();
-
-    const map: Record<string, string> = {
-      basic: "Basic",
-      pro: "Pro",
-      promax: "ProMAX",
-      "pro max": "ProMAX",
-    };
-
-    const key = picked ? map[picked.toLowerCase()] : "Pro";
-    onBuyPlan?.(key);
-  }}
   className="bg-white text-purple-900 px-4 py-2 rounded-xl font-bold text-sm hover:bg-purple-100 transition-colors shadow-lg shadow-purple-900/20 flex items-center gap-2"
 >
   <span>⚡</span>
