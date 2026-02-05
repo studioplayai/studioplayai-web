@@ -130,42 +130,64 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   console.log("LEMON EVENT:", eventName, "variant:", variantName, "add:", planInfo.credits, "userId:", userId, "email:", email);
 
-  const filter = userId
-    ? `id=eq.${encodeURIComponent(userId)}`
-    : `email=eq.${encodeURIComponent(email)}`;
+ // --- Update credits in Supabase (GET current -> PATCH new), by email only ---
+const safeEmail = encodeURIComponent(email);
 
-  const get = await supabaseRequest(`/rest/v1/profiles?select=id,email,credits,plan&${filter}`, "GET");
-  if (!get.ok || !Array.isArray(get.json) || get.json.length === 0) {
-    return res.status(404).json({ ok: false, error: "User not found in profiles", by: userId ? "id" : "email" });
-  }
+// 1) Get current profile by email
+const get = await supabaseRequest(
+  `/rest/v1/profiles?email=eq.${safeEmail}&select=id,email,credits,plan`,
+  "GET"
+);
 
-  const profile = get.json[0];
-  const currentCredits = Number(profile.credits || 0);
-  const newCredits = currentCredits + planInfo.credits;
+if (!get.ok || !Array.isArray(get.json) || get.json.length === 0) {
+  return res.status(404).json({ ok: false, error: "User not found in profiles", by: "email", email });
+}
 
-  const patch = await supabaseRequest(
-  `/rest/v1/profiles?id=eq.${userId}&select=id`,
+const profile = get.json[0];
+const profileId = profile.id;
+const currentCredits = Number(profile.credits || 0);
+const newCredits = currentCredits + Number(planInfo.credits || 0);
+
+// 2) Patch profile (no upsert, no _prefer)
+const patch = await supabaseRequest(
+  `/rest/v1/profiles?id=eq.${profileId}`,
+
   "PATCH",
   {
     credits: newCredits,
     plan: planInfo.planKey,
   }
+
 );
 
 
 
 
-  if (!patch.ok) {
-    return res.status(500).json({ ok: false, error: "Failed updating credits", details: patch.text });
-  }
-
-  return res.status(200).json({
-    ok: true,
-    eventName,
-    variantName,
-    added: planInfo.credits,
-    before: currentCredits,
-    after: newCredits,
-    user: { id: profile.id, email: profile.email },
+if (!patch.ok) {
+  return res.status(500).json({
+    ok: false,
+    error: "Failed updating credits",
+    details: patch.text,
   });
+}
+
+return res.status(200).json({
+  ok: true,
+  eventName,
+  variantName,
+  added: planInfo.credits,
+  before: currentCredits,
+  after: newCredits,
+  result: patch.json,
+});
+
+
+return res.status(200).json({
+  ok: true,
+  eventName,
+  variantName,
+  added: planInfo.credits,
+  result: patch.json,
+});
+  
 }
