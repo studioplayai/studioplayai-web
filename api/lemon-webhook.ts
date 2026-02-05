@@ -118,7 +118,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     payload?.meta?.custom_data?.user_id ||
     null;
 
-  const email =
+  let email =
+
     payload?.data?.attributes?.user_email ||
     payload?.data?.attributes?.customer_email ||
     payload?.data?.attributes?.email ||
@@ -127,6 +128,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!userId && !email) {
     return res.status(400).json({ ok: false, error: "Missing user_id/email" });
   }
+
+  if (typeof email !== "string" || !email.trim()) {
+  return res.status(400).json({ ok: false, error: "Missing/invalid email" });
+}
+email = email.trim().toLowerCase();
+
+const eventId =
+  payload?.meta?.event_id ||
+  payload?.meta?.id ||
+  payload?.data?.id ||
+  payload?.data?.attributes?.order_id ||
+  payload?.data?.attributes?.subscription_id ||
+  null;
+
+if (!eventId) {
+  return res.status(400).json({ ok: false, error: "Missing event_id" });
+}
+
+// --- Idempotency: prevent double processing (log event once) ---
+const logEvent = await supabaseRequest(
+  `/rest/v1/webhook_events`,
+  "POST",
+  {
+    provider: "lemonsqueezy",
+    event_id: String(eventId),
+    event_name: eventName,
+    email: email || null,
+  },
+ 
+);
+
+if (!logEvent.ok) {
+  // אם זה קונפליקט ייחודי (כבר נרשם) → לא מעדכנים קרדיטים שוב
+  if (logEvent.status === 409) {
+    return res.status(200).json({ ok: true, duplicate: true, eventId });
+  }
+
+  return res.status(500).json({
+    ok: false,
+    error: "Failed logging webhook event",
+    details: logEvent.text,
+  });
+}
+
 
   console.log("LEMON EVENT:", eventName, "variant:", variantName, "add:", planInfo.credits, "userId:", userId, "email:", email);
 
