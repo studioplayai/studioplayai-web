@@ -232,6 +232,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             <div className="text-4xl font-black text-white mb-4">{user.credits}</div>
                             <button
   onClick={() => {
+    alert("CLICK WORKS");
   console.log("BUY_CREDITS_CLICK");
 
   // בחירה מהירה (אפשר לכתוב: Basic / Pro / ProMAX)
@@ -245,6 +246,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   };
 
   const normalized = picked ? map[picked.toLowerCase()] : "Pro";
+
+console.log("onBuyPlan exists?", !!onBuyPlan, "normalized:", normalized);
 
   // זה החיבור האמיתי לרידיירקט ב-Header
   onBuyPlan?.(normalized);
