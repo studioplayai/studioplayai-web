@@ -144,16 +144,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const newCredits = currentCredits + planInfo.credits;
 
   const patch = await supabaseRequest(
-  `/rest/v1/profiles?select=id`,
-  "POST",
+  `/rest/v1/profiles?id=eq.${userId}&select=id`,
+  "PATCH",
   {
-  id: userId,
-  email: profile.email,
-  credits: newCredits,
-  plan: planInfo.planKey
-}
-
+    credits: newCredits,
+    plan: planInfo.planKey,
+  }
 );
+
 
 
 
