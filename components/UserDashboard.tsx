@@ -233,8 +233,26 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             <button
   onClick={() => {
   console.log("BUY_CREDITS_CLICK");
-  onBuyMore?.();
+
+  // בחירה מהירה (אפשר לכתוב: Basic / Pro / ProMAX)
+  const picked = window.prompt("Choose plan: Basic / Pro / ProMAX", "Pro")?.trim();
+
+  const map: Record<string, string> = {
+    basic: "Basic",
+    pro: "Pro",
+    promax: "ProMAX",
+    "pro max": "ProMAX",
+  };
+
+  const normalized = picked ? map[picked.toLowerCase()] : "Pro";
+
+  // זה החיבור האמיתי לרידיירקט ב-Header
+  onBuyPlan?.(normalized);
+
+  // גיבוי אם משום מה onBuyPlan לא עבר
+  if (!onBuyPlan) onBuyMore?.();
 }}
+
 
   className="bg-white text-purple-900 px-4 py-2 rounded-xl font-bold text-sm hover:bg-purple-100 transition-colors shadow-lg shadow-purple-900/20 flex items-center gap-2"
 >
