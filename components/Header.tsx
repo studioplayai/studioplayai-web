@@ -30,10 +30,20 @@ const isAdmin =
   user?.email === "michalasri.shivuk@gmail.com";
 
 const handleBuyCredits = (plan: string) => {
-  console.log("BUY PLAN FROM ACCOUNT:", plan);
+  const CHECKOUT_URLS: Record<string, string> = {
+    Basic: "https://studioplayai.lemonsqueezy.com/checkout/buy/08ecbd44-3c38-4f1f-8038-c2a46016da09",
+    pro: "https://studioplayai.lemonsqueezy.com/checkout/buy/31fd827e-d92b-4aaf-96b6-bbf560de7a1d",
+    ProMAX: "https://studioplayai.lemonsqueezy.com/checkout/buy/7681543c-94d7-4cfb-acdf-d8951623f5e3",
+  };
 
-  // שלב הבא: redirect ל-LemonSqueezy
-  // window.location.href = CHECKOUT_URL
+  const url = CHECKOUT_URLS[plan];
+
+  if (!url) {
+    console.error("No checkout URL for plan:", plan);
+    return;
+  }
+
+  window.location.href = url;
 };
 
     

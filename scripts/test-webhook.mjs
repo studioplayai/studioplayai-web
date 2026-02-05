@@ -10,7 +10,8 @@ const payload = {
     event_name: "subscription_created",
   },
   data: {
-    id: "test_123",
+    id: "test_" + Date.now(),
+
     attributes: {
       user_email: "michalasri.shivuk@gmail.com",
       variant_name: "pro plan",
