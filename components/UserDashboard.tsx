@@ -232,29 +232,10 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             <div className="text-4xl font-black text-white mb-4">{user.credits}</div>
                             <button
   onClick={() => {
-    alert("CLICK WORKS");
   console.log("BUY_CREDITS_CLICK");
-
-  // בחירה מהירה (אפשר לכתוב: Basic / Pro / ProMAX)
-  const picked = window.prompt("Choose plan: Basic / Pro / ProMAX", "Pro")?.trim();
-
-const map: Record<string, string> = {
-  basic: "basic",
-  pro: "pro",
-  promax: "promax",
-  "pro max": "promax",
-};
-
-const normalized = picked ? (map[picked.toLowerCase()] ?? "pro") : "pro";
-
-console.log("onBuyPlan exists?", !!onBuyPlan, "normalized:", normalized);
-
-onBuyPlan?.(normalized);
-
-
-  // גיבוי אם משום מה onBuyPlan לא עבר
-  if (!onBuyPlan) onBuyMore?.();
+  onBuyMore?.();
 }}
+
 
 
   className="bg-white text-purple-900 px-4 py-2 rounded-xl font-bold text-sm hover:bg-purple-100 transition-colors shadow-lg shadow-purple-900/20 flex items-center gap-2"

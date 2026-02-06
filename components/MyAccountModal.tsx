@@ -172,20 +172,17 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
       <UserDashboard
   user={user}
   onClose={onClose}
-  onLogout={() => {
-    onLogout?.();
-    onClose();
-  }}
-  onUserUpdate={(updatedUser) => onUserUpdate?.(updatedUser)}   // ✅ תיקון
+  onLogout={onLogout}
+  onUserUpdate={onUserUpdate}
+
   onBuyMore={() => {
-    onClose();
-    requestAnimationFrame(() => {
-      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    console.log("OPEN_PRICING_MODAL");
+    onOpenPricing?.();
   }}
-  onBuyPlan={onBuyPlan}                                         // ✅ הוספה
+
   language="he"
 />
+
 
     </div>
   </div>
