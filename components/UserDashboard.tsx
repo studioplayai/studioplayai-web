@@ -15,7 +15,8 @@ interface UserDashboardProps {
     onUserUpdate: (updatedUser: User) => void;
     onBuyMore: () => void;
     language: AppLanguage;
-      onBuyPlan?: (plan: string) => void;
+      onOpenPricing?: () => void;
+
 
 }
 
@@ -233,8 +234,9 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             <button
   onClick={() => {
   console.log("BUY_CREDITS_CLICK");
-  onBuyMore?.();
+  onOpenPricing?.();
 }}
+
 
 
 
