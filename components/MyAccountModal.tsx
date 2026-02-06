@@ -49,9 +49,12 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
   isOpen,
   user,
   onClose,
+  onLogout,
+  onUserUpdate,
   onBuyPlan,
   onOpenPricing,
 }) => {
+
 
 
 
@@ -165,27 +168,25 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
     return (
   <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
     <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 p-6 text-white">
+
       <UserDashboard
-        user={user}
-        onClose={onClose}
-        onLogout={() => {
-        
-          onClose();
-        }}
-        onUserUpdate={() => {}}
-        onBuyMore={() => {
-  onClose(); // סוגר את האזור האישי
+  user={user}
+  onClose={onClose}
+  onLogout={() => {
+    onLogout?.();
+    onClose();
+  }}
+  onUserUpdate={(updatedUser) => onUserUpdate?.(updatedUser)}   // ✅ תיקון
+  onBuyMore={() => {
+    onClose();
+    requestAnimationFrame(() => {
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }}
+  onBuyPlan={onBuyPlan}                                         // ✅ הוספה
+  language="he"
+/>
 
-  requestAnimationFrame(() => {
-    document
-      .getElementById("pricing")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-}}
-
-
-        language="he"
-      />
     </div>
   </div>
 );
