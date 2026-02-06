@@ -238,19 +238,19 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   // בחירה מהירה (אפשר לכתוב: Basic / Pro / ProMAX)
   const picked = window.prompt("Choose plan: Basic / Pro / ProMAX", "Pro")?.trim();
 
-  const map: Record<string, string> = {
-    basic: "Basic",
-    pro: "Pro",
-    promax: "ProMAX",
-    "pro max": "ProMAX",
-  };
+const map: Record<string, string> = {
+  basic: "basic",
+  pro: "pro",
+  promax: "promax",
+  "pro max": "promax",
+};
 
-  const normalized = picked ? map[picked.toLowerCase()] : "Pro";
+const normalized = picked ? (map[picked.toLowerCase()] ?? "pro") : "pro";
 
 console.log("onBuyPlan exists?", !!onBuyPlan, "normalized:", normalized);
 
-  // זה החיבור האמיתי לרידיירקט ב-Header
-  onBuyPlan?.(normalized);
+onBuyPlan?.(normalized);
+
 
   // גיבוי אם משום מה onBuyPlan לא עבר
   if (!onBuyPlan) onBuyMore?.();

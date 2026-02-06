@@ -31,20 +31,28 @@ const isAdmin =
 
 const handleBuyCredits = (plan: string) => {
   const CHECKOUT_URLS: Record<string, string> = {
-    BASIC: "https://studioplayai.lemonsqueezy.com/checkout/buy/08ecbd44-3c38-4f1f-8038-c2a46016da09",
-    PRO: "https://studioplayai.lemonsqueezy.com/checkout/buy/31fd827e-d92b-4aaf-96b6-bbf560de7a1d",
-    PROMAX: "https://studioplayai.lemonsqueezy.com/checkout/buy/7681543c-94d7-4cfb-acdf-d8951623f5e3",
+    basic: "https://studioplayai.lemonsqueezy.com/checkout/buy/08ecbd44-3c38-4f1f-8038-c2a46016da09",
+    pro: "https://studioplayai.lemonsqueezy.com/checkout/buy/31fd827e-d92b-4aaf-96b6-bbf560de7a1d",
+    promax: "https://studioplayai.lemonsqueezy.com/checkout/buy/7681543c-94d7-4cfb-acdf-d8951623f5e3",
   };
 
-  const url = CHECKOUT_URLS[plan];
+  const normalized = (plan || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ""); // "pro max" -> "promax"
+
+  console.log("BUY PLAN:", { plan, normalized });
+
+  const url = CHECKOUT_URLS[normalized];
 
   if (!url) {
-    console.error("No checkout URL for plan:", plan);
+    console.error("No checkout URL for plan:", plan, "normalized:", normalized);
     return;
   }
 
   window.location.href = url;
 };
+
 
     
 
