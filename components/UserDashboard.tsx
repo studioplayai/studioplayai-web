@@ -323,12 +323,6 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
         </div>
         
     );
-    {isPricingOpen && (
-  <PricingModal
-    isOpen={isPricingOpen}
-    onClose={() => setIsPricingOpen(false)}
-
-  />
-)}
+  
 
 };
