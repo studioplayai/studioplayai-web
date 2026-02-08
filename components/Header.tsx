@@ -68,7 +68,12 @@ const handleBuyCredits = (plan: string) => {
     return;
   }
 
+  if (import.meta.env.PROD) {
   window.location.href = url;
+} else {
+  console.log("DEV MODE — redirect blocked:", url);
+}
+
 };
 
 
@@ -128,9 +133,12 @@ const handleBuyCredits = (plan: string) => {
                  <div className="flex items-center gap-2">
   <button
   onClick={() => {
-    console.log("AVATAR CLICK -> PRICING");
-    openPricingModal();
-  }}
+  console.log("AVATAR CLICK -> ACCOUNT");
+  setIsAccountOpen(true);     // פותח אזור אישי
+  setIsPricingOpen(false);    // מוודא שלא קופץ Pricing
+  setIsAdminOpen(false);
+}}
+
   className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 font-bold text-white flex items-center justify-center"
   title="האזור האישי"
 >
