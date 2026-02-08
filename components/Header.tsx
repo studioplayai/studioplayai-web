@@ -187,14 +187,14 @@ const handleBuyCredits = (plan: string) => {
     onClose={() => setIsAccountOpen(false)}
     onLogout={onLogout}
     onUserUpdate={() => {}}
-    onOpenPricing={() => {
-      console.log("OPEN PRICING FROM ACCOUNT");
-      setIsPricingOpen(true);
+    onBuyMore={() => {
       setIsAccountOpen(false);
+      setIsPricingOpen(true);
     }}
     language="he"
   />
 )}
+
 
 
 
