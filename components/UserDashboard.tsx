@@ -6,28 +6,21 @@ import { getAllTransactions } from '../services/paymentService';
 import { updateUserProfile, claimDailyBonus } from '../services/authService';
 import { DASHBOARD_T } from "./dashboardTranslations";
 import PricingModal from "./PricingModal";
-const [isPricingOpen, setIsPricingOpen] = useState(false);
+
+
 
 
 
 
 interface UserDashboardProps {
-    user: User;
-    onClose: () => void;
-    onLogout: () => void;
-    onUserUpdate: (updatedUser: User) => void;
-    onBuyMore: () => void;
-    language: AppLanguage;
-      onOpenPricing?: () => void;
-
-
+  user: User;
+  onClose: () => void;
+  onLogout: () => void;
+  onUserUpdate: (updatedUser: User) => void;
+  onBuyMore: () => void;
+  language: AppLanguage;
+  onOpenPricing?: () => void;
 }
-
-const openPricing = () => {
-  console.log("OPEN_PRICING_MODAL");
-  setIsPricingOpen(true);
-};
-
 
 export const UserDashboard: React.FC<UserDashboardProps> = ({
   user,
@@ -35,9 +28,13 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   onLogout,
   onUserUpdate,
   onBuyMore,
+  language,
   onOpenPricing,
-  language
 }) => {
+
+
+
+
 
    
     const t = (key: string) => (DASHBOARD_T as any)[language]?.[key] ?? key;
@@ -51,7 +48,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     const [bonusMessage, setBonusMessage] = useState<string | null>(null);
     const [timeToNext, setTimeToNext] = useState<string | null>(null);
     const [isPricingOpen, setIsPricingOpen] = useState(false);
-    
+
 
 
     const openPricingModal = () => {
@@ -253,10 +250,10 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                             <h3 className="text-slate-400 text-sm font-bold uppercase mb-2">{t('creditsLeft')}</h3>
                             <div className="text-4xl font-black text-white mb-4">{user.credits}</div>
                             <button
- onClick={() => {
+  onClick={() => {
   console.log("BUY_CREDITS_CLICK");
-  openPricing();
-
+  onBuyMore();
+  onClose();
 }}
 
 
@@ -321,8 +318,15 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                 </div>
             </div>
         </div>
-        
+
     );
-  
+    {isPricingOpen && (
+  <PricingModal
+    isOpen={isPricingOpen}
+    onClose={() => setIsPricingOpen(false)}
+  />
+)}
 
 };
+
+

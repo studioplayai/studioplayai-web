@@ -1,83 +1,152 @@
 import React from "react";
 
-type PlanKey = "planBasic" | "planPro" | "planProMax";
-
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  plan: PlanKey;
 };
 
-const PLAN_LABEL: Record<PlanKey, string> = {
-  planBasic: "planBasic",
-  planPro: "planPro",
-  planProMax: "planProMax",
-};
-
-// ✅ פה נכניס אחרי זה את ה־LemonSqueezy URLs שלך
-const CHECKOUT_URL: Record<PlanKey, string> = {
-  planBasic: "", // TODO: paste LemonSqueezy checkout URL
-  planPro: "", // TODO
-  planProMax: "", // TODO
-};
-
-export default function PricingModal({ isOpen, onClose, plan }: Props) {
+export default function PricingModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null;
 
-  const label = PLAN_LABEL[plan];
-  const url = CHECKOUT_URL[plan];
+  const goCheckout = (url: string) => {
+  console.log("GO_CHECKOUT", url);
 
-  const goCheckout = () => {
-    if (!url) {
-      alert("חסר Checkout URL ל־" + label + " — תדביק אותו ב־PricingModal.tsx");
-      return;
-    }
-    window.location.href = url; // ✅ redirect ל־LemonSqueezy
-  };
+  if (import.meta.env.PROD) {
+    window.location.href = url;
+  } else {
+    console.log("DEV MODE — redirect blocked:", url);
+  }
+};
+
+
+  // שלב 1: חבילות סטטיות (עד שנחבר URL אמיתיים)
+  const packages = [
+    {
+      id: "basic",
+      title: "Basic",
+      subtitle: "חבילה בסיסית",
+      priceText: "₪—",
+      url: "#",
+    },
+    {
+      id: "pro",
+      title: "Pro",
+      subtitle: "הכי פופולרי",
+      priceText: "₪—",
+      url: "#",
+    },
+    {
+      id: "ultra",
+      title: "Ultra",
+      subtitle: "מקסימום קרדיטים",
+      priceText: "₪—",
+      url: "#",
+    },
+  ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-6">
 
-      <div className="relative z-[101] w-full max-w-lg rounded-2xl border border-white/10 bg-[#0b1020]/90 p-6 shadow-2xl">
-        <div className="flex items-start justify-between gap-4">
-          <div className="text-right">
-            <h3 className="text-xl font-bold text-white">מעולה! ממשיכים לתשלום</h3>
-            <p className="mt-1 text-sm text-white/60">
-              בחרת: <span className="text-white font-semibold">{label}</span>
-            </p>
+    {/* Overlay */}
+    <div
+      className="absolute inset-0"
+      onClick={onClose}
+    />
+
+    {/* Modal */}
+    <div className="relative w-full max-w-7xl bg-[#0B1220] rounded-3xl p-10 text-white border border-white/10">
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-10">
+        <h2 className="text-3xl font-bold">בחר חבילה</h2>
+
+        <button
+          onClick={onClose}
+          className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20"
+        >
+          סגור
+        </button>
+      </div>
+
+      {/* Pricing Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        {/* BASIC */}
+        <div className="rounded-2xl p-6 bg-slate-900 border border-white/10 flex flex-col">
+
+          <h3 className="text-xl font-bold mb-2">Basic</h3>
+          <p className="text-gray-400 mb-4">חבילה בסיסית</p>
+
+          <div className="text-4xl font-bold mb-6">
+            ₪39.95
           </div>
 
+          <ul className="space-y-2 mb-6 text-sm">
+            <li>✔ 35 קרדיטים</li>
+            <li>✔ תמונות בסיסיות</li>
+            <li>✔ למתחילים</li>
+          </ul>
+
           <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg px-3 py-1 text-sm text-white/70 hover:text-white border border-white/10 hover:border-white/20"
+            className="mt-auto py-3 rounded-xl bg-white/10 hover:bg-white/20"
           >
-            סגור
+            subscribe
           </button>
         </div>
 
-        <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-4 text-right">
-          <div className="text-sm text-white/80">
-            אנחנו נעביר אותך ל־Checkout מאובטח של LemonSqueezy.
+        {/* PRO */}
+        <div className="rounded-2xl p-6 bg-gradient-to-br from-yellow-400/20 to-purple-500/20 border-2 border-yellow-400 flex flex-col relative">
+
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-black px-4 py-1 rounded-full text-xs font-bold">
+            MOST POPULAR
           </div>
-          <div className="mt-2 text-xs text-white/50">
-            אפשר לבטל בכל רגע.
+
+          <h3 className="text-xl font-bold mb-2">Pro</h3>
+          <p className="text-gray-300 mb-4">מקצועי</p>
+
+          <div className="text-4xl font-bold mb-6">
+            ₪59.95
           </div>
+
+          <ul className="space-y-2 mb-6 text-sm">
+            <li>✔ 80 קרדיטים</li>
+            <li>✔ איכות גבוהה</li>
+            <li>✔ ללא סימן מים</li>
+          </ul>
+
+          <button
+            className="mt-auto py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold"
+          >
+            subscribe
+          </button>
         </div>
 
-        <button
-          type="button"
-          onClick={goCheckout}
-          className="mt-6 w-full rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 px-4 py-3 text-sm font-extrabold text-black hover:opacity-95"
-        >
-          מעבר לתשלום מאובטח
-        </button>
+        {/* ULTRA */}
+        <div className="rounded-2xl p-6 bg-slate-900 border border-white/10 flex flex-col">
 
-        <div className="mt-3 text-center text-xs text-white/40">
-          אם לא עובר — תוודא שהדבקת Checkout URL.
+          <h3 className="text-xl font-bold mb-2">Ultra</h3>
+          <p className="text-gray-400 mb-4">מקסימום</p>
+
+          <div className="text-4xl font-bold mb-6">
+            ₪89.99
+          </div>
+
+          <ul className="space-y-2 mb-6 text-sm">
+            <li>✔ 120 קרדיטים</li>
+            <li>✔ נפח מקסימלי</li>
+            <li>✔ ללא הגבלה</li>
+          </ul>
+
+          <button
+            className="mt-auto py-3 rounded-xl bg-white/10 hover:bg-white/20"
+          >
+            subscribe
+          </button>
         </div>
+
       </div>
     </div>
-  );
+  </div>
+);
+
 }

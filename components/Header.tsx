@@ -9,6 +9,10 @@ import IconLogout from './common/IconLogout';
 import { AuthUser } from '../types';
 import UserMenu from "./UserMenu";
 import AdminDashboard from "./AdminDashboard";
+import PricingSection from "./PricingSection";
+import PricingModal from "./PricingModal";
+
+
 
 
 
@@ -22,7 +26,21 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGalleryOpen }) => {
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
-    
+    const [isPricingOpen, setIsPricingOpen] = useState(false);
+
+   
+    const openPricingModal = () => {
+  console.log("OPEN_PRICING_MODAL");
+
+  // סגור כל מודאל אחר
+  setIsAccountOpen(false);
+  setIsAdminOpen(false);
+
+  // פתח Pricing
+  setIsPricingOpen(true);
+};
+
+
 
 
 const isAdmin =
@@ -110,8 +128,8 @@ const handleBuyCredits = (plan: string) => {
                  <div className="flex items-center gap-2">
   <button
   onClick={() => {
-    console.log("AVATAR CLICK");   // 👈 שורה זו להוסיף
-    setIsAccountOpen(true);
+    console.log("AVATAR CLICK -> PRICING");
+    openPricingModal();
   }}
   className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 font-bold text-white flex items-center justify-center"
   title="האזור האישי"
@@ -154,13 +172,49 @@ const handleBuyCredits = (plan: string) => {
 
 
 
-          <MyAccountModal
-  isOpen={isAccountOpen}
-  user={user}
-  onClose={() => setIsAccountOpen(false)}
-  onBuyPlan={handleBuyCredits}
-/>
+         {isAccountOpen && (
+  <MyAccountModal
+    isOpen={isAccountOpen}
+    user={user as any}
+    onClose={() => setIsAccountOpen(false)}
+    onLogout={onLogout}
+    onUserUpdate={() => {}}
+    onOpenPricing={() => {
+      console.log("OPEN PRICING FROM ACCOUNT");
+      setIsPricingOpen(true);
+      setIsAccountOpen(false);
+    }}
+    language="he"
+  />
+)}
 
+
+
+
+{isPricingOpen && (
+  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+
+    {/* רקע לסגירה */}
+    <div
+      className="absolute inset-0"
+      onClick={() => setIsPricingOpen(false)}
+    />
+
+    {/* קונטיינר רחב */}
+    <div className="relative w-full max-w-7xl px-6">
+      <PricingSection />
+    </div>
+
+    {/* כפתור סגירה */}
+    <button
+      onClick={() => setIsPricingOpen(false)}
+      className="absolute top-6 left-6 text-white text-2xl"
+    >
+      ✕
+    </button>
+
+  </div>
+)}
 
 {isAdminOpen && (
   <AdminDashboard onClose={() => setIsAdminOpen(false)} />

@@ -64,7 +64,7 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
 });
 
 
-  if (!isOpen) return null;
+  
  
 
   // זמני: עד שנחבר שפה מהמערכת (אם צריך בכלל)
@@ -166,22 +166,37 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
 
 
     return (
-  <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
+  <div className="fixed inset-0 z-[999999] bg-black/60 flex items-center justify-center">
     <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 p-6 text-white">
 
-      <UserDashboard
-  user={user}
-  onClose={onClose}
-  onLogout={onLogout}
-  onUserUpdate={onUserUpdate}
+<div className="text-white">
+  <div className="flex items-center justify-between mb-4">
+    <div className="text-xl font-bold">האזור האישי</div>
+    <button
+      onClick={onClose}
+      className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20"
+    >
+      סגור
+    </button>
+  </div>
 
-  onBuyMore={() => {
-    console.log("OPEN_PRICING_MODAL");
-    onOpenPricing?.();
-  }}
+  <div className="text-sm text-slate-300">
+    {user?.email}
+  </div>
 
-  language="he"
-/>
+  <button
+    onClick={() => {
+  console.log("OPEN_PRICING_MODAL");
+  onOpenPricing?.();
+  onClose();
+}}
+
+    className="mt-6 w-full px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 font-bold"
+  >
+    רכוש קרדיטים
+  </button>
+</div>
+
 
 
     </div>
