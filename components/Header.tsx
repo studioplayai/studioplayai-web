@@ -7,10 +7,12 @@ import IconLightning from './common/IconLightning';
 import IconUser from './common/IconUser';
 import IconLogout from './common/IconLogout';
 import { AuthUser } from '../types';
-import UserMenu from "./UserMenu";
 import AdminDashboard from "./AdminDashboard";
 import PricingSection from "./PricingSection";
 import PricingModal from "./PricingModal";
+import { UserDashboard } from "./UserDashboard";
+
+
 
 
 
@@ -134,10 +136,11 @@ const handleBuyCredits = (plan: string) => {
   <button
   onClick={() => {
   console.log("AVATAR CLICK -> ACCOUNT");
-  setIsAccountOpen(true);     // פותח אזור אישי
-  setIsPricingOpen(false);    // מוודא שלא קופץ Pricing
+  setIsAccountOpen(true);
+  setIsPricingOpen(false);
   setIsAdminOpen(false);
 }}
+
 
   className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 font-bold text-white flex items-center justify-center"
   title="האזור האישי"
@@ -181,19 +184,24 @@ const handleBuyCredits = (plan: string) => {
 
 
          {isAccountOpen && (
-  <MyAccountModal
-    isOpen={isAccountOpen}
-    user={user as any}
-    onClose={() => setIsAccountOpen(false)}
-    onLogout={onLogout}
-    onUserUpdate={() => {}}
-    onBuyMore={() => {
-      setIsAccountOpen(false);
-      setIsPricingOpen(true);
-    }}
-    language="he"
-  />
+  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+    <div
+      className="absolute inset-0"
+      onClick={() => setIsAccountOpen(false)}
+    />
+    <div className="relative w-[min(1200px,95vw)]">
+      <UserDashboard
+        user={user as any}
+        onClose={() => setIsAccountOpen(false)}
+        onLogout={onLogout}
+        onBuyMore={openPricingModal}
+          language="he"
+      />
+    </div>
+  </div>
 )}
+
+
 
 
 
@@ -201,28 +209,24 @@ const handleBuyCredits = (plan: string) => {
 
 {isPricingOpen && (
   <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-
-    {/* רקע לסגירה */}
-    <div
-      className="absolute inset-0"
-      onClick={() => setIsPricingOpen(false)}
-    />
-
-    {/* קונטיינר רחב */}
+    <div className="absolute inset-0" onClick={() => setIsPricingOpen(false)} />
     <div className="relative w-full max-w-7xl px-6">
-      <PricingSection />
+      <PricingSection
+  onSelectPlan={(plan) => {
+    handleBuyCredits(plan);     // מפעיל רכישה
+    setIsPricingOpen(false);    // סוגר את החבילות
+  }}
+/>
+
     </div>
-
-    {/* כפתור סגירה */}
-    <button
-      onClick={() => setIsPricingOpen(false)}
-      className="absolute top-6 left-6 text-white text-2xl"
-    >
-      ✕
+    <button onClick={() => setIsPricingOpen(false)} className="absolute top-6 left-6 text-white text-2xl">
+      X
     </button>
-
+    
   </div>
 )}
+
+
 
 {isAdminOpen && (
   <AdminDashboard onClose={() => setIsAdminOpen(false)} />

@@ -185,23 +185,23 @@ export const MyAccountModal: React.FC<MyAccountModalProps> = ({
   </div>
 
   <button
-    onClick={() => {
-  console.log("OPEN_PRICING_MODAL");
-  onOpenPricing?.();
-  onClose();
-}}
+  onClick={() => {
+    onOpenPricing?.();
+  }}
+  className="..."
+>
+  רכוש קרדיטים
+</button>
 
-    className="mt-6 w-full px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 font-bold"
-  >
-    רכוש קרדיטים
-  </button>
+
 </div>
 
 
 
     </div>
   </div>
-);
+  );
 };
 
 export default MyAccountModal;
+
