@@ -328,12 +328,21 @@ The 'category' field in 'industrySpecific' MUST be "{niche}". The suggestions MU
                 type: 'select',
                 group: 'הגדרות קריאייטיב',
                 options: [
-                    { value: 'photorealistic-seamless', label: 'שילוב פוטו-ריאליסטי מושלם' },
-                    { value: 'worlds-collision', label: 'מפגש עולמות סוריאליסטי' },
-                    { value: 'glass-dorama', label: 'דיורמה בתוך כדור זכוכית' },
-                    { value: 'double-exposure-master', label: 'חשיפה כפולה סינמטית' },
+                    { value: 'photorealistic-seamless-integration', label: 'פוטו-ריאליסטי (שילוב מושלם)' },
+                    { value: 'cinematic-double-exposure', label: 'חשיפה כפולה סינמטית' },
+                    { value: 'holographic-projection-glow', label: 'הקרנה הולוגרפית זוהרת' },
+                    { value: 'torn-paper-collage', label: 'קולאז\' נייר קרוע' },
+                    { value: 'smoke-and-ink-particle-dispersion', label: 'פיזור חלקיקי עשן/דיו' },
+                    { value: 'digital-glitch-fusion', label: 'מיזוג גליץ\' דיגיטלי' },
+                    { value: 'surreal-dream-painting-integration', label: 'שילוב כציור חלום סוריאליסטי' },
+                    { value: 'glass-diorama-encapsulation', label: 'דיורמה בתוך כדור זכוכית' },
+                    { value: 'origami-world-integration', label: 'שילוב בעולם אוריגמי' },
+                    { value: 'chromatic-ghosting-effect', label: 'אפקט "רוח רפאים" כרומטי' },
+                    { value: 'golden-kintsugi-repair', label: '"תיקון" בזהב (קינצוגי)' },
+                    { value: 'watercolor-bleed-effect', label: 'זליגת צבעי מים' },
+                    { value: 'neon-outline-integration', label: 'קווי מתאר בניאון זוהר' },
                 ],
-                defaultValue: 'photorealistic-seamless'
+                defaultValue: 'photorealistic-seamless-integration'
             },
             { id: 'prompt', label: 'תיאור השילוב (אופציונלי)', type: 'textarea', placeholder: 'למשל: תגרום לזה להיראות כאילו הוא צף...', group: 'שפר פרומפט', defaultValue: '' }
         ]
