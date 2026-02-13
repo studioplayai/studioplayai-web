@@ -488,10 +488,10 @@ const StyleStudioCategory: React.FC<Props> = ({ onGenerate, isLoading, files, se
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-panel-border bg-panel-light/40 p-4 text-center h-[74px]">
+                        <label htmlFor="file-upload" className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-panel-border bg-panel-light/40 p-4 text-center h-[74px] cursor-pointer hover:bg-panel-light/60 hover:border-purple-500 transition-colors">
                             <UploadIcon className="h-6 w-6 text-gray-500" />
-                            <p className="mt-2 text-xs text-gray-400">יש להעלות תמונה לסביבת העבודה.</p>
-                        </div>
+                            <p className="mt-2 text-xs text-gray-400">לחץ להעלאת תמונות</p>
+                        </label>
                     )}
                 </div>
 
