@@ -560,6 +560,11 @@ FINAL VALIDATION: Is the main subject IDENTICAL to the original? Is the backgrou
                     { value: 'renaissance-oil-painting', label: 'ציור שמן קלאסי (רנסאנס)' },
                     { value: 'giant-billboard-times-square', label: 'שלט חוצות ענק (טיימס סקוור)' },
                     { value: 'floating-zen-garden', label: 'גן זן יפני (מרחף)' },
+                    { value: 'crystal-cave-pedestal', label: 'מערת קריסטלים זוהרת' },
+                    { value: 'street-art-graffiti-wall', label: 'קיר גרפיטי (אמנות רחוב)' },
+                    { value: 'frozen-in-ice-block', label: 'קפוא בתוך קוביית קרח' },
+                    { value: 'covered-in-hyperrealistic-flowers', label: 'פיצוץ של פרחים היפר-ריאליסטיים' },
+                    { value: 'miniature-world-diorama', label: 'עולם מיניאטורי (דיורמה)' },
                 ], 
                 defaultValue: 'luxury-glass-pedestal' 
             },
@@ -581,3 +586,4 @@ export const toolCategories = {
     [ToolCategory.Video]: { name: 'וידאו ורילס', icon: IconFilm },
     [ToolCategory.Publish]: { name: 'פרסום', icon: IconSend }
 }
+    
