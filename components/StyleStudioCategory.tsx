@@ -11,6 +11,7 @@ import IconCamera from './common/IconCamera';
 import IconPalette from './common/IconPalette';
 import IconMagic from './common/IconMagic';
 import IconStar from './common/IconStar';
+import IconLayers from './common/IconLayers';
 
 type StyleCategory = 'professional' | 'creative' | 'humorous';
 
@@ -19,8 +20,13 @@ type StylePresetKey =
     | 'luxury_editorial' 
     | 'natural_beauty' 
     | 'fashion_studio' 
-    | 'urban_style' 
+    | 'urban_style'
+    | 'product_splash'
+    | 'gourmet_food'
     | 'artistic_ai' 
+    | 'double_exposure'
+    | 'holographic_glitch'
+    | 'liquid_chrome'
     | 'business_profile' 
     | 'social_media_look'
     | 'cinematic_drone'
@@ -108,6 +114,51 @@ const STYLE_PRESETS: StylePreset[] = [
         prompt: 'pure minimalist studio, high-key lighting, solid neutral background, soft shadows, clean geometry, focus on form and facial features',
         color: 'from-gray-300/20 to-gray-100/20'
     },
+    {
+        id: 'natural_beauty',
+        category: 'professional',
+        label: 'Natural Beauty',
+        icon: IconUser,
+        desc: 'מראה טבעי ורענן עם תאורת "שעת הזהב" רכה ומחמיאה.',
+        prompt: 'natural beauty portrait, golden hour soft light, authentic expression, clean and fresh look, high-end skincare ad style, minimal makeup, gentle focus',
+        color: 'from-yellow-400/20 to-orange-300/20'
+    },
+    {
+        id: 'fashion_studio',
+        category: 'professional',
+        label: 'Fashion Studio',
+        icon: IconCamera,
+        desc: 'הפקת אופנה בסטודיו עם תאורה חדה, צבעים נועזים ורקע אחיד.',
+        prompt: 'high fashion studio shot, bold colors, solid color background, sharp lighting, confident pose, professional model look, e-commerce fashion style',
+        color: 'from-cyan-400/20 to-blue-500/20'
+    },
+    {
+        id: 'urban_style',
+        category: 'professional',
+        label: 'Urban Style',
+        icon: IconCamera,
+        desc: 'סטריט-סטייל אורבני עם אווירת עיר, גרפיטי וקונטרסט גבוה.',
+        prompt: 'urban streetwear fashion, city background, high contrast lighting, edgy style, graffiti wall, natural pose, modern and cool aesthetic',
+        color: 'from-slate-500/20 to-gray-700/20'
+    },
+    {
+        id: 'product_splash',
+        category: 'professional',
+        label: 'Product Splash',
+        icon: IconZap,
+        desc: 'הקפאת תנועה דינמית של נוזלים סביב האובייקט, בסגנון פרסומת יוקרתית.',
+        prompt: 'dramatic high-speed liquid splash photography, product in motion, crisp details, studio lighting, water droplets frozen mid-air, commercial advertising style',
+        color: 'from-blue-400/20 to-cyan-300/20'
+    },
+    {
+        id: 'gourmet_food',
+        category: 'professional',
+        label: 'Gourmet Food',
+        icon: IconCamera,
+        desc: 'צילום אוכל מקצועי בסגנון מישלן, עם דגש על פרטים, טקסטורה וקיטור.',
+        prompt: 'professional gourmet food photography, michelin star plating, macro details, gentle steam, dark moody lighting, high-end restaurant aesthetic, crisp textures',
+        color: 'from-orange-600/20 to-yellow-700/20'
+    },
 
     // --- Creative ---
     { 
@@ -145,6 +196,42 @@ const STYLE_PRESETS: StylePreset[] = [
         desc: 'תקריב קיצוני בטבע עם עומק שדה רדוד וטקסטורות אורגניות.',
         prompt: 'nature macro cinematography, extreme close-up, organic textures, sunlight filtering through leaves, very shallow depth of field, dew drops, serene vibe',
         color: 'from-green-600/20 to-emerald-400/20'
+    },
+    {
+        id: 'artistic_ai',
+        category: 'creative',
+        label: 'Artistic AI',
+        icon: IconMagic,
+        desc: 'יצירת אמנות דיגיטלית בסגנון קונספט-ארט, עם פרטים עשירים וצבעוניות ייחודית.',
+        prompt: 'digital concept art painting, intricate details, vibrant and unique color palette, artistic style of Artgerm and Greg Rutkowski, trending on ArtStation, surreal and beautiful',
+        color: 'from-teal-400/20 to-cyan-600/20'
+    },
+    {
+        id: 'double_exposure',
+        category: 'creative',
+        label: 'Double Exposure',
+        icon: IconLayers,
+        desc: 'שילוב אמנותי של פורטרט ונוף (עיר/טבע) ליצירת קומפוזיציה פואטית.',
+        prompt: 'cinematic double exposure effect, merging a portrait with a dramatic landscape (forest/cityscape), poetic and artistic, silhouette overlay, high contrast, fine art photography',
+        color: 'from-slate-500/20 to-sky-700/20'
+    },
+    {
+        id: 'holographic_glitch',
+        category: 'creative',
+        label: 'Holographic Glitch',
+        icon: IconZap,
+        desc: 'אפקט הולוגרמה עתידני עם גליצ\'ים דיגיטליים וזוהר ניאון.',
+        prompt: 'futuristic holographic projection of the subject, digital glitch art effect, neon scan lines, cyberpunk aesthetic, data moshing, glowing particles, dark background',
+        color: 'from-pink-500/20 to-indigo-500/20'
+    },
+    {
+        id: 'liquid_chrome',
+        category: 'creative',
+        label: 'Liquid Chrome',
+        icon: IconMagic,
+        desc: 'הפיכת חלקים מהדמות למתכת כרום נוזלית, מבריקה וסוריאליסטית.',
+        prompt: 'surreal liquid chrome effect, parts of the subject melting into reflective mercury-like metal, abstract and artistic, high contrast, glossy reflections, studio lighting',
+        color: 'from-gray-400/20 to-gray-200/20'
     },
 
     // --- Humorous ---
@@ -322,7 +409,8 @@ const STYLE_PRESETS: StylePreset[] = [
 ];
 
 interface Props {
-    onGenerate: (prompt: string, settings: any, files: File[], mediaType?: MediaType) => Promise<void>;
+    // FIX: Allow onGenerate to return Promise<void> or void to match the prop from the parent.
+    onGenerate: (prompt: string, settings: any, files: File[], mediaType?: MediaType) => Promise<void> | void;
     isLoading: boolean;
     files: File[];
     setFiles: (files: File[]) => void;
