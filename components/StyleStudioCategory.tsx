@@ -58,7 +58,12 @@ type StylePresetKey =
     | 'funny_sumo'
     | 'funny_detective'
     | 'funny_rockstar'
-    | 'funny_bobblehead';
+    | 'funny_bobblehead'
+    | 'funny_claymation'
+    | 'funny_gnomes'
+    | 'funny_puppets'
+    | 'funny_food_heads'
+    | 'funny_inflatables';
 
 interface StylePreset {
     id: StylePresetKey;
@@ -241,8 +246,17 @@ const STYLE_PRESETS: StylePreset[] = [
         label: '3D Cartoon', 
         icon: IconMagic,
         desc: 'הפוך לדמות אנימציה בסגנון סרטי פיקסאר ודיסני.',
-        prompt: '3D animated character style, Pixar and Disney inspired, expressive features, stylized textures, vibrant colors, clean rendering, cute aesthetic',
+        prompt: 'Transform each person into a 3D animated character in the style of Pixar and Disney. Give them expressive features, stylized textures, and vibrant colors. The final image should be a clean, cute, and high-quality render.',
         color: 'from-yellow-400/20 to-orange-500/20'
+    },
+     { 
+        id: 'funny_claymation', 
+        category: 'humorous',
+        label: '3D Claymation', 
+        icon: IconMagic,
+        desc: 'הפכו לדמויות פלסטלינה תלת-ממדיות בסגנון סטופ-מושן.',
+        prompt: 'Transform each person into a 3D claymation character in the style of stop-motion animation. The characters should have fingerprint textures on the "clay" and vibrant colors, with a playful and quirky aesthetic like Aardman Animations.',
+        color: 'from-orange-500/20 to-red-400/20'
     },
     { 
         id: 'funny_superhero', 
@@ -250,7 +264,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Comic Superhero', 
         icon: IconZap,
         desc: 'הפוך לגיבור-על קומיקסי עם גלימה ותחפושת צבעונית.',
-        prompt: 'person as a comic book superhero, vibrant colorful costume, flowing cape, dynamic action pose, city skyline background, pow speech bubble, pop art style',
+        prompt: 'Transform each person in the image into a unique comic book superhero. Give each one a vibrant colorful costume, a flowing cape, and a dynamic action pose. Place them against a city skyline background with pop art elements.',
         color: 'from-blue-500/20 to-red-500/20'
     },
     { 
@@ -259,7 +273,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Royal King/Queen', 
         icon: IconStar,
         desc: 'הפוך למלך או מלכה עם כתר מפואר וארמון ברקע.',
-        prompt: 'person as a cartoon royal king or queen, wearing a giant magnificent crown, opulent robes, sitting on a throne, castle background, funny majestic expression',
+        prompt: 'Transform each person into cartoon royalty (kings, queens, etc.). Dress them in magnificent crowns and opulent robes. Place them on thrones inside a grand castle. Their expressions should be comically majestic.',
         color: 'from-amber-500/20 to-purple-500/20'
     },
     { 
@@ -268,7 +282,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Space Astronaut', 
         icon: IconCamera,
         desc: 'הפוך לאסטרונאוט בחלל עם קסדה עגולה וכוכבים ברקע.',
-        prompt: 'person as a cartoon astronaut in space, oversized round helmet with reflection of Earth, floating among stars and planets, zero gravity pose, funny sci-fi',
+        prompt: 'Transform each person into a cartoon astronaut floating in space. Each should have an oversized round helmet reflecting the Earth. The background should be filled with stars and planets in a funny sci-fi style.',
         color: 'from-gray-700/20 to-blue-900/20'
     },
     { 
@@ -277,7 +291,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: '8-Bit Pixel Art', 
         icon: IconGrid,
         desc: 'הפוך לדמות פיקסל-ארט ממשחק וידאו ישן.',
-        prompt: 'person transformed into 8-bit pixel art character, retro video game style, blocky details, limited color palette, pixelated background, arcade game aesthetic',
+        prompt: 'Transform each person into an 8-bit pixel art character from a retro video game. Use a limited color palette and blocky details for both the characters and the background, in an arcade game aesthetic.',
         color: 'from-green-500/20 to-blue-500/20'
     },
     { 
@@ -286,8 +300,44 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Marble Statue', 
         icon: IconUser,
         desc: 'הפוך לפסל שיש קלאסי בפוזה דרמטית ומשעשעת.',
-        prompt: 'person as a classical greek marble statue, chiseled texture, dramatic and funny heroic pose, museum background with a red rope, polished stone look',
+        prompt: 'Reimagine each person as a classical Greek marble statue. Give them a chiseled texture and a dramatic but funny heroic pose. Place them in a museum setting.',
         color: 'from-gray-400/20 to-gray-700/20'
+    },
+    { 
+        id: 'funny_gnomes', 
+        category: 'humorous',
+        label: 'Garden Gnomes', 
+        icon: IconUser,
+        desc: 'הפכו לגמדי גינה מצחיקים עם כובעים אדומים וזקנים לבנים.',
+        prompt: 'Turn each person into a funny garden gnome. They should have pointy red hats, long white beards (if appropriate), and be placed in a vibrant, magical garden setting.',
+        color: 'from-red-500/20 to-green-600/20'
+    },
+    { 
+        id: 'funny_puppets', 
+        category: 'humorous',
+        label: 'Muppet Puppets', 
+        icon: IconUser,
+        desc: 'הפכו לבובות בסגנון החבובות, עם עיניים גדולות ומרקם לבד.',
+        prompt: 'Recreate each person as a hand puppet in the style of The Muppets. Give them large, expressive eyes, felt-like textures, and place them on a puppet show stage.',
+        color: 'from-yellow-500/20 to-pink-500/20'
+    },
+    { 
+        id: 'funny_food_heads', 
+        category: 'humorous',
+        label: 'Fruit & Veg Heads', 
+        icon: IconMagic,
+        desc: 'ראשים מוחלפים בפירות וירקות מצחיקים שמתאימים לאישיות.',
+        prompt: 'Creatively replace the head of each person with a fruit or vegetable that comedically matches their expression or personality. The body should remain, creating a surreal and funny composition.',
+        color: 'from-green-500/20 to-orange-500/20'
+    },
+    { 
+        id: 'funny_inflatables', 
+        category: 'humorous',
+        label: 'Wacky Inflatables', 
+        icon: IconZap,
+        desc: 'הפכו לרקדני צינור מתנפחים, רוקדים בטירוף.',
+        prompt: 'Transform each person into a wacky waving inflatable tube dancer, like those seen at car dealerships. Each should be a different bright color, dancing wildly in front of a generic storefront.',
+        color: 'from-cyan-400/20 to-red-400/20'
     },
     { 
         id: 'funny_clown', 
@@ -295,7 +345,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Funny Clown', 
         icon: IconMagic,
         desc: 'הפוך לליצן ידידותי עם פאה צבעונית ואף אדום.',
-        prompt: 'person as a funny and friendly clown, colorful rainbow wig, big red nose, oversized bow tie, happy expression, circus tent background, playful aesthetic',
+        prompt: 'Transform each person into a funny and friendly clown. Each should have a colorful rainbow wig, a big red nose, and an oversized bow tie with a happy expression. Place them against a circus tent background.',
         color: 'from-red-500/20 to-blue-400/20'
     },
     { 
@@ -304,7 +354,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Caveman', 
         icon: IconUser,
         desc: 'חזור לתקופת האבן כאדם קדמון עם אלה גדולה.',
-        prompt: 'person as a cartoon caveman, wearing animal skin tunic, holding a giant wooden club, messy hair, prehistoric jungle background with a volcano, funny primitive look',
+        prompt: 'Transform each person into a cartoon caveman from the stone age. Dress them in animal skin tunics and have them hold giant wooden clubs. The background should be a prehistoric jungle with a volcano.',
         color: 'from-orange-800/20 to-yellow-900/20'
     },
     { 
@@ -313,7 +363,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'אמן פנטומימה', 
         icon: IconUser,
         desc: 'הפוך לאמן פנטומימה צרפתי עם איפור לבן וכומתה.',
-        prompt: 'person as a classic french mime artist, white face paint, black striped shirt, red suspenders, black beret, trapped in an invisible box pose, funny theatrical expression',
+        prompt: 'Transform each person into a classic French mime artist. Give them white face paint, a black striped shirt, and a beret. Pose them as if they are trapped in an invisible box with theatrical expressions.',
         color: 'from-gray-200/20 to-gray-500/20'
     },
     { 
@@ -322,7 +372,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'מדען מטורף', 
         icon: IconZap,
         desc: 'שער לבן פרוע, משקפי מגן וניצוצות חשמל ברקע.',
-        prompt: 'person as a cartoon mad scientist, wild white hair sticking out, wearing goggles and a lab coat, holding a bubbling beaker, electrical sparks in the background, crazy funny expression',
+        prompt: 'Turn each person into a cartoon mad scientist. Give them wild, sticking-out white hair, goggles, and a lab coat. The background should be a lab filled with bubbling beakers and electrical sparks.',
         color: 'from-green-400/20 to-blue-400/20'
     },
     { 
@@ -331,7 +381,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'מתאבק סומו', 
         icon: IconUser,
         desc: 'הפוך למתאבק סומו יפני חזק ומצחיק בזירת קרב.',
-        prompt: 'transform the person into a funny sumo wrestler, keeping their face, large sumo body with a mawashi, in a sumo wrestling ring (dohyō), powerful and funny stance',
+        prompt: 'Transform each person into a funny sumo wrestler, keeping their face. Give them a large sumo body with a mawashi (loincloth) and place them in a sumo wrestling ring (dohyō) in a powerful and funny stance.',
         color: 'from-red-600/20 to-orange-400/20'
     },
     { 
@@ -340,7 +390,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'בלש נואר', 
         icon: IconCamera,
         desc: 'סגנון סרט בלשי ישן, עם כובע, מעיל גשם וצללים דרמטיים.',
-        prompt: 'person as an old-timey noir detective, wearing a fedora and trench coat, dramatic high-contrast black and white lighting, mysterious shadows, holding a magnifying glass, funny serious expression',
+        prompt: 'Reimagine each person as a character in an old-timey noir detective film. Use high-contrast black and white lighting, mysterious shadows, and have them wear fedoras and trench coats.',
         color: 'from-slate-500/20 to-slate-800/20'
     },
     { 
@@ -349,7 +399,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'כוכב רוק (שנות ה-80)', 
         icon: IconZap,
         desc: 'שיער ארוך ותוסס, בגדי עור וגיטרה חשמלית על במה עם אורות.',
-        prompt: 'person as an 80s hair metal rock star, big wild hair, wearing a leather jacket, playing an electric guitar on a concert stage with colorful lights, rock and roll funny expression',
+        prompt: 'Turn each person into an 80s hair metal rock star. Give them big, wild hair, leather jackets, and have them playing electric guitars on a concert stage with colorful lights.',
         color: 'from-pink-500/20 to-purple-500/20'
     },
     { 
@@ -358,7 +408,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'בובת ראש מתנדנד', 
         icon: IconMagic,
         desc: 'הפוך לבובת "וובלהד" עם ראש גדול וגוף קטן על מעמד.',
-        prompt: 'person transformed into a bobblehead doll, with an oversized cartoonish head and a small body, standing on a base with their name, shiny plastic texture, funny wobbly look',
+        prompt: 'Transform each person into a bobblehead doll. Give them an oversized cartoonish head and a small body, standing on a base. The texture should look like shiny plastic.',
         color: 'from-cyan-400/20 to-blue-500/20'
     },
     { 
@@ -367,7 +417,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Viking Warrior', 
         icon: IconZap,
         desc: 'הפוך ללוחם ויקינגי קשוח עם זקן מפואר וקסדה.',
-        prompt: 'fierce viking warrior, detailed fur armor, iron helmet, magnificent beard, cold snowy background, epic historical cinematic lighting',
+        prompt: 'Transform each person into a fierce but funny viking warrior. They should have magnificent beards, iron helmets, and detailed fur armor. Place them in a cold, snowy background with epic lighting.',
         color: 'from-orange-800/20 to-red-900/20'
     },
     { 
@@ -376,7 +426,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Tourist Alien', 
         icon: IconCamera,
         desc: 'חייזר תייר שמבקר בכדור הארץ עם מצלמה.',
-        prompt: 'green-skinned alien tourist, wearing a colorful hawaiian shirt, holding a retro camera, standing in front of Eiffel Tower, funny sci-fi concept',
+        prompt: 'Transform each person into a green-skinned alien tourist visiting Earth. Dress them in colorful Hawaiian shirts and have them hold retro cameras in front of a famous landmark like the Eiffel Tower.',
         color: 'from-green-400/20 to-cyan-500/20'
     },
     { 
@@ -385,7 +435,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Giant Baby', 
         icon: IconUser,
         desc: 'הפוך לתינוק ענק בחיתול באמצע העיר.',
-        prompt: 'giant baby character, wearing a diaper, sitting in the middle of a busy city street, holding a giant bottle, confused funny expression, cinematic scale',
+        prompt: 'Reimagine each person as a giant baby wearing a diaper, sitting in the middle of a busy city street. Give them a confused but funny expression.',
         color: 'from-blue-300/20 to-pink-300/20'
     },
     { 
@@ -394,7 +444,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Legendary Pirate', 
         icon: IconCamera,
         desc: 'הפוך לפיראט קשוח עם רטייה וספינה בלב ים.',
-        prompt: 'rugged pirate captain, eye patch, weathered hat, pirate ship on high seas background, stormy sky, cinematic action look',
+        prompt: 'Transform each person into a rugged pirate captain. Include accessories like eye patches and weathered hats. Place them on a pirate ship on the high seas under a stormy sky for a cinematic action look.',
         color: 'from-blue-800/20 to-gray-900/20'
     },
     { 
@@ -403,7 +453,7 @@ const STYLE_PRESETS: StylePreset[] = [
         label: 'Friendly Zombie', 
         icon: IconMagic,
         desc: 'גרסת זומבי "ידידותית" ומפורטת, סטייל קומי.',
-        prompt: 'stylized friendly zombie character, comic horror style, bright green skin, detailed textures, glowing eyes, funny post-apocalyptic background',
+        prompt: 'Transform each person into a stylized, friendly zombie in a comic-horror style. Give them bright green skin, detailed textures, and glowing eyes against a funny post-apocalyptic background.',
         color: 'from-green-700/20 to-emerald-900/20'
     },
 ];
@@ -447,8 +497,8 @@ const StyleStudioCategory: React.FC<Props> = ({ onGenerate, isLoading, files, se
 
     const handleGenerate = () => {
         const fullPrompt = `AI STYLE STUDIO TASK: ${activePreset.prompt}. 
-        INSTRUCTION: Maintain the exact facial identity, bone structure, and expression of the person in the provided images. 
-        Apply the ${activePreset.label} style while keeping the person recognizable. 
+        INSTRUCTION: Maintain the exact facial identity, bone structure, and expression of all people in the provided images. 
+        Apply the '${activePreset.label}' style while keeping everyone recognizable. 
         Final output must be a single high-quality image.`;
         
         onGenerate(fullPrompt, { style_preset: selectedStyle }, files, 'image');

@@ -17,6 +17,9 @@ interface WorkspaceProps {
     onFileUpload: () => void;
     onClearResult: () => void;
     onToast: (msg: string, type: 'success' | 'error') => void;
+    onEdit: () => void;
+
+    
 }
 
 const TextToolInitialState: React.FC<{ tool: Tool }> = ({ tool }) => {
@@ -43,7 +46,7 @@ const TextToolInitialState: React.FC<{ tool: Tool }> = ({ tool }) => {
 };
 
 
-const Workspace: React.FC<WorkspaceProps> = ({ isLoading, result, selectedTool, files, onFileUpload, onClearResult, onToast }) => {
+const Workspace: React.FC<WorkspaceProps> = ({ isLoading, result, selectedTool, files, onFileUpload, onClearResult, onToast, onEdit }) => {
     const isTextTool = selectedTool.media === 'text';
 
     const renderContent = () => {
@@ -57,7 +60,13 @@ const Workspace: React.FC<WorkspaceProps> = ({ isLoading, result, selectedTool, 
             return <TextToolInitialState tool={selectedTool} />;
         }
         if (files.length > 0) {
-            return <FilePreview file={files[0]} onReplace={onFileUpload} />;
+            return <FilePreview
+  file={files[0]}
+  onReplace={onFileUpload}
+  onEdit={onEdit}
+/>
+
+;
         }
         return <EmptyWorkspace onSelectFile={onFileUpload} />;
     };

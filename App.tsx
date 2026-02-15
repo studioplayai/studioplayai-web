@@ -11,8 +11,7 @@ import Spinner from './components/common/Spinner';
 import MediaActionsModal from './components/MediaActionsModal';
 import { supabase } from "./services/supabaseClient";
 import { ensureProfileWithFreeCredits, getUserById } from './services/authService';
-
-
+import ImageEditorModal from './ImageEditorModal';
 
 
 
@@ -30,6 +29,32 @@ const App: React.FC = () => {
     
     // New state for download/share modal
     const [activeMediaAction, setActiveMediaAction] = useState<GalleryItem | null>(null);
+
+    const [editingFile, setEditingFile] = useState<File | null>(null);
+
+    useEffect(() => {
+  console.log("editingFile changed:", editingFile);
+}, [editingFile]);
+
+
+    const handleOpenEditor = () => {
+  if (files.length > 0) {
+    setEditingFile(files[0]);
+  }
+};
+
+
+    const handleSaveEdits = (editedFile: File) => {
+  // מחליף את התמונה הנוכחית בתמונה הערוכה
+  setFiles([editedFile]);
+  setEditingFile(null);
+};
+
+const handleCloseEditor = () => {
+  setEditingFile(null);
+};
+
+
 
     // 🔐 Pricing / Checkout
 const [showPricing, setShowPricing] = useState(false);
@@ -273,6 +298,20 @@ Integrate the text naturally. The output must be a high-quality image with the g
     const handleLogout = async () => {
   console.log("HEADER LOGOUT");
 
+  const handleOpenEditor = () => {
+        if (files.length > 0) {
+            setEditingFile(files[0]);
+        }
+    };
+    const handleSaveEdits = (editedFile: File) => {
+        setFiles([editedFile]); // מחליף את התמונה הישנה בחדשה
+        setEditingFile(null); // סוגר את החלון
+        setToast({ message: 'השינויים נשמרו!', type: 'success'});
+    };
+    const handleCloseEditor = () => {
+        setEditingFile(null); // סוגר את החלון
+    };
+
   try {
     // ניתוק Supabase
     await supabase.auth.signOut();
@@ -305,6 +344,7 @@ Integrate the text naturally. The output must be a high-quality image with the g
     }
 
     return (
+        
         <div className="font-sans antialiased text-gray-100 bg-[#0D0E1B]">
             {user ? (
   <EditorLayout
@@ -317,6 +357,8 @@ Integrate the text naturally. The output must be a high-quality image with the g
     setToolSettings={setToolSettings}
     files={files}
     setFiles={setFiles}
+    onEdit={handleOpenEditor}
+
     onGenerate={runGeneration}
     isLoading={isLoading}
     result={result}
@@ -333,6 +375,8 @@ Integrate the text naturally. The output must be a high-quality image with the g
       setResult(null);
     }}
     onToast={(msg, type) => setToast({ message: msg, type })}
+    
+
   />
 ) : (
   <LandingPage />
@@ -345,6 +389,14 @@ Integrate the text naturally. The output must be a high-quality image with the g
                 onClose={() => setActiveMediaAction(null)} 
                 onToast={(m, t) => setToast({ message: m, type: t })}
             />
+
+            {editingFile && (
+                <ImageEditorModal 
+                    file={editingFile}
+                    onSave={handleSaveEdits}
+                    onClose={handleCloseEditor}
+                />
+            )}
             
             {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
         </div>

@@ -7,7 +7,7 @@ import ControlsSidebar from './ControlsSidebar';
 import Header from './Header';
 import FloatingToolbar from './FloatingToolbar';
 import MobileBottomNav from './MobileBottomNav';
-import UserMenu from "./UserMenu";
+
 
 
 interface EditorLayoutProps {
@@ -30,9 +30,33 @@ interface EditorLayoutProps {
     onShareItem: (item: GalleryItem) => void;
     onUseItemAsInput: (item: GalleryItem) => void;
     onToast: (msg: string, type: 'success' | 'error') => void;
+    onEdit: (file: File) => void;
+
 }
 
-const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
+const EditorLayout: React.FC<EditorLayoutProps> = ({
+  user,
+  onLogout,
+  tools,
+  selectedTool,
+  onSelectTool,
+  toolSettings,
+  setToolSettings,
+  files,
+  setFiles,
+  onGenerate,
+  isLoading,
+  result,
+  galleryItems,
+  onSelectItem,
+  onDeleteItem,
+  onDownloadItem,
+  onShareItem,
+  onUseItemAsInput,
+  onToast,
+  onEdit, // ✅ זה החדש
+}) => {
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isGalleryOpen, setIsGalleryOpen] = useState(window.innerWidth > 1200);
     const [isControlsOpen, setIsControlsOpen] = useState(true);
@@ -58,14 +82,14 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
-            props.setFiles(Array.from(event.target.files));
+            setFiles(Array.from(event.target.files));
         }
     };
 
     const toggleGallery = () => setIsGalleryOpen(prev => !prev);
     const toggleControls = () => setIsControlsOpen(prev => !prev);
 
-    const hasContent = props.files.length > 0 || !!props.result;
+    const hasContent = files.length > 0 || !!result;
 
     return (
         <div className="flex h-screen w-full flex-col overflow-hidden bg-[#0D0E1B] text-gray-200 selection:bg-purple-500/30">
@@ -73,8 +97,8 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
 
             <Header 
                 onToggleGallery={toggleGallery} 
-                user={props.user} 
-                onLogout={props.onLogout} 
+                user={user} 
+                onLogout={onLogout} 
                 isGalleryOpen={isGalleryOpen}
             />
             
@@ -84,15 +108,15 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
                 {isControlsOpen && (
                     <div className="hidden h-full lg:flex transition-all duration-300">
                          <ControlsSidebar
-                            tools={props.tools}
-                            selectedTool={props.selectedTool}
-                            onSelectTool={props.onSelectTool}
-                            toolSettings={props.toolSettings}
-                            setToolSettings={props.setToolSettings}
-                            files={props.files}
-                            setFiles={props.setFiles}
-                            onGenerate={props.onGenerate}
-                            isLoading={props.isLoading}
+                            tools={tools}
+                            selectedTool={selectedTool}
+                            onSelectTool={onSelectTool}
+                            toolSettings={toolSettings}
+                            setToolSettings={setToolSettings}
+                            files={files}
+                            setFiles={setFiles}
+                            onGenerate={onGenerate}
+                            isLoading={isLoading}
                         />
                     </div>
                 )}
@@ -107,16 +131,18 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
 
                 <main className="relative flex-1 flex flex-col p-2 md:p-4 lg:p-6 workspace-bg overflow-hidden">
                     <div className="flex-1 relative flex items-center justify-center overflow-hidden bg-black/40 backdrop-blur-sm rounded-3xl border border-white/5 shadow-2xl">
-                        <FloatingToolbar isVisible={hasContent && !props.isLoading} />
+                        <FloatingToolbar isVisible={hasContent && !isLoading} />
                         <Workspace
-                            key={`${props.selectedTool?.media}-${props.selectedTool?.name}`}
-                            isLoading={props.isLoading}
-                            result={props.result}
-                            selectedTool={props.selectedTool}
-                            files={props.files}
+                            key={`${selectedTool?.media}-${selectedTool?.name}`}
+                            isLoading={isLoading}
+                            result={result}
+                            selectedTool={selectedTool}
+                            files={files}
                             onFileUpload={handleFileUploadTrigger}
-                            onClearResult={() => props.onSelectItem(null)}
-                            onToast={props.onToast}
+                            onClearResult={() => onSelectItem(null)}
+                            onToast={onToast}
+                            onEdit={(file) => onEdit(file)}
+
                         />
                     </div>
                 </main>
@@ -126,12 +152,12 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
                     <div className="hidden h-full lg:flex transition-all duration-300">
                         <GallerySidebar 
                             toggleGallery={toggleGallery}
-                            items={props.galleryItems}
-                            onSelectItem={props.onSelectItem}
-                            onDeleteItem={props.onDeleteItem}
-                            onDownloadItem={props.onDownloadItem}
-                            onShareItem={props.onShareItem}
-                            onUseItemAsInput={props.onUseItemAsInput}
+                            items={galleryItems}
+                            onSelectItem={onSelectItem}
+                            onDeleteItem={onDeleteItem}
+                            onDownloadItem={onDownloadItem}
+                            onShareItem={onShareItem}
+                            onUseItemAsInput={onUseItemAsInput}
                         />
                     </div>
                 )}
@@ -142,7 +168,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
                         <ControlsSidebar
                             isMobileView={true}
                             onClose={() => setMobileView('workspace')}
-                            {...props}
+                           
                         />
                     </div>
                 )}
@@ -153,12 +179,12 @@ const EditorLayout: React.FC<EditorLayoutProps> = (props) => {
                             isMobileView={true}
                             onClose={() => setMobileView('workspace')}
                             toggleGallery={() => {}}
-                            items={props.galleryItems}
-                            onSelectItem={props.onSelectItem}
-                            onDeleteItem={props.onDeleteItem}
-                            onDownloadItem={props.onDownloadItem}
-                            onShareItem={props.onShareItem}
-                            onUseItemAsInput={props.onUseItemAsInput}
+                            items={galleryItems}
+                            onSelectItem={onSelectItem}
+                            onDeleteItem={onDeleteItem}
+                            onDownloadItem={onDownloadItem}
+                            onShareItem={onShareItem}
+                            onUseItemAsInput={onUseItemAsInput}
                          />
                     </div>
                 )}

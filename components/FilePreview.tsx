@@ -5,12 +5,15 @@ import Button from './common/Button';
 import IconPen from './common/IconPen';
 import UploadIcon from './common/UploadIcon';
 
+
 interface FilePreviewProps {
     file: File;
     onReplace: () => void;
+    onEdit: () => void;
 }
 
-const FilePreview: React.FC<FilePreviewProps> = ({ file, onReplace }) => {
+const FilePreview: React.FC<FilePreviewProps> = ({ file, onReplace, onEdit }) => {
+
     const [fileUrl, setFileUrl] = useState<string | null>(null);
 
     useEffect(() => {
@@ -54,10 +57,18 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onReplace }) => {
             
             {/* Controls */}
             <div className="absolute right-4 top-4 z-10">
-                 <Button variant="default" className="!bg-panel-dark/80 !border-panel-border/50 backdrop-blur-sm">
-                    <IconPen className="h-4 w-4 ml-2" />
-                    ערוך תמונה
-                 </Button>
+                 <Button
+  variant="default"
+  onClick={() => {
+    console.log("EDIT CLICKED ✅");
+    onEdit();
+  }}
+  className="bg-panel-dark/80 border-panel-border/50 backdrop-blur-sm"
+>
+  <IconPen className="h-4 w-4 ml-2" />
+  ערוך תמונה
+</Button>
+
             </div>
             <div className="absolute bottom-4 left-4 z-10">
                 <Button variant="default" onClick={onReplace} className="!bg-panel-dark/80 !border-panel-border/50 backdrop-blur-sm">
