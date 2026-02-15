@@ -9,6 +9,8 @@ import IconClose from './common/IconClose';
 import IconLightbulb from './common/IconLightbulb';
 import StyleStudioCategory from './StyleStudioCategory';
 import VideoReelCategory from './VideoReelCategory';
+import { consumeCredits } from "../services/credits";
+
 
 interface ControlsSidebarProps {
     tools: Tool[];
@@ -167,13 +169,45 @@ const ControlsSidebar: React.FC<ControlsSidebarProps> = (props) => {
     const { isMobileView = false, onClose } = props;
     const [activeCategory, setActiveCategory] = useState<ToolCategory>(ToolCategory.Ideas);
 
-    const handleGenerateClick = () => {
-        const settingsWithNiche = {
-            ...props.toolSettings,
-            niche: props.toolSettings.niche || props.selectedTool.fields?.find(f => f.id === 'niche')?.defaultValue
-        };
-        props.onGenerate(props.selectedTool.prompt, settingsWithNiche, props.files, props.selectedTool.media);
-    };
+    const handleGenerateClick = async () => {
+        alert("SOURCE ✅ StyleStudioCategory.handleGenerate");
+
+        console.log("✅ SOURCE = ControlsSidebar.handleGenerateClick");
+
+  // 1️⃣ ניסיון לחייב קרדיט
+  const charge = await consumeCredits(1);
+
+  console.log("💳 credit charge:", charge);
+
+  if (!charge.ok) {
+    if (charge.reason === "no_credits") {
+      alert("אין לך קרדיטים. נא לרכוש חבילה.");
+      return;
+    }
+
+    console.error(charge.error);
+    alert("שגיאה בחיוב קרדיטים");
+    return;
+  }
+
+  console.log("✅ credits left:", charge.creditsLeft);
+
+  // 2️⃣ המשך יצירה רגיל
+  const settingsWithNiche = {
+    ...props.toolSettings,
+    niche:
+      props.toolSettings.niche ||
+      props.selectedTool.fields?.find((f) => f.id === "niche")?.defaultValue,
+  };
+
+  props.onGenerate(
+    props.selectedTool.prompt,
+    settingsWithNiche,
+    props.files,
+    props.selectedTool.media
+  );
+};
+
 
    const handleCategorySelect = (category: ToolCategory) => {
   console.log("CATEGORY CLICK:", category);

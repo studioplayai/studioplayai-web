@@ -12,6 +12,8 @@ import IconPalette from './common/IconPalette';
 import IconMagic from './common/IconMagic';
 import IconStar from './common/IconStar';
 import IconLayers from './common/IconLayers';
+import { consumeCredits } from "../services/credits";
+
 
 type StyleCategory = 'professional' | 'creative' | 'humorous';
 
@@ -495,14 +497,38 @@ const StyleStudioCategory: React.FC<Props> = ({ onGenerate, isLoading, files, se
         STYLE_PRESETS.find(p => p.id === selectedStyle) || STYLE_PRESETS[0]
     , [selectedStyle]);
 
-    const handleGenerate = () => {
-        const fullPrompt = `AI STYLE STUDIO TASK: ${activePreset.prompt}. 
-        INSTRUCTION: Maintain the exact facial identity, bone structure, and expression of all people in the provided images. 
-        Apply the '${activePreset.label}' style while keeping everyone recognizable. 
-        Final output must be a single high-quality image.`;
-        
-        onGenerate(fullPrompt, { style_preset: selectedStyle }, files, 'image');
-    };
+    const handleGenerate = async () => {
+        console.log("✅ SOURCE = StyleStudioCategory.handleGenerate");
+
+
+  console.log("🔥 handleGenerate clicked");
+
+  const charge = await consumeCredits(1);
+  console.log("💳 charge result:", charge);
+
+  if (!charge.ok) {
+    console.log("❌ charge failed reason:", charge.reason);
+    if (charge.reason === "no_credits") {
+      alert("אין לך קרדיטים. נא לרכוש קרדיטים.");
+      return;
+    }
+    alert("שגיאה בחיוב קרדיטים");
+    return;
+  }
+
+  console.log("✅ credits charged. left:", (charge as any).creditsLeft ?? (charge as any).credits_left);
+
+
+  // המשך הקוד הקיים שלך:
+  const fullPrompt = `AI STYLE STUDIO TASK: ${activePreset.prompt}.
+INSTRUCTION: Maintain the exact facial identity, bone structure, and expression of all people in the provided images.
+Apply the '${activePreset.label}' style while keeping everyone recognizable.
+Final output must be a single high-quality image.`;
+
+  onGenerate(fullPrompt, { style_preset: selectedStyle }, files, "image");
+};
+
+
 
     return (
         <div className="flex flex-col h-full bg-panel-dark/30 rounded-2xl overflow-hidden" dir="rtl">
