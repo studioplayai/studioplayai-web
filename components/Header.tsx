@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MyAccountModal } from "./MyAccountModal";
 import Button from './common/Button';
 import IconClock from './common/IconClock';
@@ -11,6 +11,7 @@ import AdminDashboard from "./AdminDashboard";
 import PricingSection from "./PricingSection";
 import PricingModal from "./PricingModal";
 import { UserDashboard } from "./UserDashboard";
+import { getCurrentUser } from "../services/authService";
 
 
 
@@ -29,6 +30,30 @@ const Header: React.FC<HeaderProps> = ({ onToggleGallery, user, onLogout, isGall
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
     const [isPricingOpen, setIsPricingOpen] = useState(false);
+
+    const [creditsLive, setCreditsLive] = useState<number>(() => {
+  return (user?.credits ?? getCurrentUser()?.credits ?? 0) as number;
+});
+
+useEffect(() => {
+  setCreditsLive((user?.credits ?? 0) as number);
+}, [user?.credits]);
+
+useEffect(() => {
+  const onUserUpdated = (e: any) => {
+    const next = (e?.detail?.credits ?? getCurrentUser()?.credits ?? 0) as number;
+
+    console.log("HEADER got event credits =", next); // ✅ פה לשים
+
+    setCreditsLive(next);
+  };
+
+  window.addEventListener("studioplayai:user-updated", onUserUpdated);
+  return () =>
+    window.removeEventListener("studioplayai:user-updated", onUserUpdated);
+}, []);
+
+
 
    
     const openPricingModal = () => {
@@ -101,7 +126,8 @@ const handleBuyCredits = (plan: string) => {
                     <span className="text-sm font-semibold text-gray-300">קרדיטים:</span>
                 
 
-                   <span className="font-bold text-white">{user?.credits ?? 0}
+                   <span className="font-bold text-white">{creditsLive}
+
 </span>
 
                     <IconLightning className="h-4 w-4 text-yellow-400" />

@@ -170,7 +170,8 @@ const ControlsSidebar: React.FC<ControlsSidebarProps> = (props) => {
     const [activeCategory, setActiveCategory] = useState<ToolCategory>(ToolCategory.Ideas);
 
     const handleGenerateClick = async () => {
-        alert("SOURCE ✅ StyleStudioCategory.handleGenerate");
+    
+
 
         console.log("✅ SOURCE = ControlsSidebar.handleGenerateClick");
 

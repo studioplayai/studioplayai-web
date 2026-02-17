@@ -12,11 +12,37 @@ import MediaActionsModal from './components/MediaActionsModal';
 import { supabase } from "./services/supabaseClient";
 import { ensureProfileWithFreeCredits, getUserById } from './services/authService';
 import ImageEditorModal from './ImageEditorModal';
+import { getCurrentUser } from "./services/authService";
 
 
 
 
 const App: React.FC = () => {
+    useEffect(() => {
+  const syncUserFromStorage = () => {
+    const u = getCurrentUser();
+    if (u) setUser({ ...(u as any) }); // חשוב: אובייקט חדש
+  };
+
+  const onUserUpdated = (e: any) => {
+    if (e?.detail) {
+      setUser({ ...(e.detail as any) }); // חשוב: אובייקט חדש
+    } else {
+      syncUserFromStorage();
+    }
+  };
+
+  // init
+  syncUserFromStorage();
+
+  window.addEventListener("studioplayai:user-updated", onUserUpdated);
+
+  return () => {
+    window.removeEventListener("studioplayai:user-updated", onUserUpdated);
+  };
+}, []);
+
+
     const [user, setUser] = useState<AuthUser | null>(null);
     const [authLoading, setAuthLoading] = useState(true);
     const [toolSettings, setToolSettings] = useState<Record<string, any>>({});
@@ -136,7 +162,8 @@ if (window.location.hash === "#" || window.location.hash === "#/") {
     };
 
     setUser(syncedUser as any);
-    localStorage.setItem("studioplay_current_user", JSON.stringify(syncedUser));
+    localStorage.setItem("CURRENT_USER_KEY", JSON.stringify(syncedUser));
+
 
   }
 
@@ -357,8 +384,7 @@ Integrate the text naturally. The output must be a high-quality image with the g
     setToolSettings={setToolSettings}
     files={files}
     setFiles={setFiles}
-    onEdit={handleOpenEditor}
-
+   onEdit={(file) => setEditingFile(file)}
     onGenerate={runGeneration}
     isLoading={isLoading}
     result={result}

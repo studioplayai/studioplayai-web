@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-
+import { getCurrentUser, setCurrentUser, patchCurrentUser  } from "./authService";
 
 export async function consumeCredits(amount = 1) {
   const { data, error } = await supabase.rpc("consume_credits", { p_amount: amount });
@@ -12,5 +12,15 @@ export async function consumeCredits(amount = 1) {
     return { ok: false as const, reason: "error" as const, error };
   }
 
-  return { ok: true as const, creditsLeft: data?.[0]?.credits_left ?? 0 };
+  const creditsLeft = data?.[0]?.credits_left ?? 0;
+
+  patchCurrentUser({ credits: creditsLeft });
+
+  window.dispatchEvent(
+  new CustomEvent("studioplayai:user-updated", { detail: { credits: creditsLeft } })
+);
+
+
+
+  return { ok: true as const, creditsLeft };
 }

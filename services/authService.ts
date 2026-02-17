@@ -15,9 +15,11 @@ const normalizePlan = (p: any): User["plan"] => {
   }
   return "free";
 };
+export const USER_UPDATED_EVENT = "studioplayai:user-updated";
 
 
-const CURRENT_USER_KEY = 'studioplay_current_user_v1';
+
+export const CURRENT_USER_KEY = "studioplay_current_user_v1";
 const ADMIN_EMAILS = new Set([
   "michalasri.shivuk@gmail.com",
   "admin@studioplay.ai",
@@ -136,34 +138,36 @@ export const login = async (email: string, name?: string): Promise<User> => {
             const { data: existingUser, error: fetchError } = await supabase
   .from('profiles')
   .select('*')
-  .eq('email', email)
+  .eq('id', (await supabase.auth.getUser()).data.user?.id)
   .maybeSingle(); // ✅
 
 
-            if (fetchError || !existingUser) {
-                user = {
-                    id: crypto.randomUUID(),
-                    email,
-                    name: displayName,
-                    role: isAdmin ? 'admin' : 'user',
-                    credits: existingUser?.credits ?? 3,
-                    plan: isAdmin ? 'agency' : 'free',
-                    joinedAt: Date.now()
-                };
-                ensureUserInDB(user);
-            } else {
-                user = {
-                    id: existingUser.id,
-                    email: existingUser.email,
-                    name: existingUser.name,
-                    role: existingUser.role,
-                    credits: existingUser.credits,
-                    plan: normalizePlan(existingUser.plan),
-                    joinedAt: new Date(existingUser.joined_at).getTime(),
-                    lastSeen: existingUser.last_seen ? new Date(existingUser.last_seen).getTime() : undefined,
-                    currentActivity: existingUser.current_activity
-                };
-            }
+            // תמיד משתמשים ב־ID של Supabase Auth (לא מייצרים חדש!)
+const authUser = (await supabase.auth.getUser()).data.user;
+
+if (!authUser) {
+  throw new Error("No authenticated user");
+}
+
+user = {
+  id: authUser.id, // זה המפתח למניעת כפילויות
+  email: email,
+  name: displayName,
+  role: isAdmin ? "admin" : "user",
+  credits: existingUser?.credits ?? (isAdmin ? 999999 : 3),
+  plan: existingUser?.plan ?? (isAdmin ? "agency" : "free"),
+  joinedAt: existingUser
+    ? new Date(existingUser.joined_at).getTime()
+    : Date.now(),
+  lastSeen: existingUser?.last_seen
+    ? new Date(existingUser.last_seen).getTime()
+    : undefined,
+  currentActivity: existingUser?.current_activity,
+};
+
+// אם לא קיים בפרופיל — ניצור, אם קיים — נעדכן
+await ensureUserInDB(user);
+
         } catch (e) {
             user = createLocalUser(email, displayName)
 
@@ -185,7 +189,7 @@ const createLocalUser = (email: string, name: string): User => {
     email,
     name,
     role: admin ? "admin" : "user",
-    credits: 3,
+    credits: admin ? 999999 : 3,
     plan: admin ? "agency" : "free",
     joinedAt: Date.now(),
   };
@@ -208,6 +212,8 @@ export const getCurrentUser = (): User | null => {
         return null;
     }
 };
+
+
 
 export const getAllUsers = async (): Promise<User[]> => {
     if (!isSupabaseConfigured()) return [];
@@ -233,6 +239,27 @@ export const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
+export const setCurrentUser = (user: User | null) => {
+  if (!user) {
+    localStorage.removeItem(CURRENT_USER_KEY);
+  } else {
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  }
+
+};
+
+export const patchCurrentUser = (patch: Record<string, any>) => {
+  const current = getCurrentUser();
+  if (!current) return null;
+
+  const updated = { ...current, ...patch };
+  setCurrentUser(updated);
+
+  return updated;
+};
+
+
+
 export const updateUserProfile = async (userId: string, name: string): Promise<User | null> => {
     if (!isSupabaseConfigured()) {
         const local = getCurrentUser();
@@ -243,6 +270,8 @@ export const updateUserProfile = async (userId: string, name: string): Promise<U
         }
         return null;
     }
+
+    
 
     try {
         const { data, error } = await supabase
@@ -429,5 +458,43 @@ export const getUserById = async (userId: string) => {
 
   if (error) return null;
   return data;
+
+  
 };
 
+export const refreshCurrentUserFromDB = async (): Promise<User | null> => {
+  if (!isSupabaseConfigured()) return getCurrentUser();
+
+  const auth = await supabase.auth.getUser();
+  const uid = auth.data.user?.id;
+  if (!uid) return null;
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", uid)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  const updated: User = {
+    id: data.id,
+    email: data.email,
+    name: data.name,
+    role: data.role,
+    credits: data.credits,
+    plan: normalizePlan(data.plan),
+    joinedAt: data.joined_at
+      ? new Date(data.joined_at).getTime()
+      : Date.now(),
+    lastSeen: data.last_seen
+      ? new Date(data.last_seen).getTime()
+      : undefined,
+    currentActivity: data.current_activity,
+  };
+
+  setCurrentUser(updated);
+
+
+  return updated;
+};
