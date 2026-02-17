@@ -182,8 +182,9 @@ const ControlsSidebar: React.FC<ControlsSidebarProps> = (props) => {
 
   if (!charge.ok) {
     if (charge.reason === "no_credits") {
-      alert("אין לך קרדיטים. נא לרכוש חבילה.");
-      return;
+     window.dispatchEvent(new CustomEvent("studioplayai:open-pricing"));
+return;
+
     }
 
     console.error(charge.error);

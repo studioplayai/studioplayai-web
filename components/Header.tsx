@@ -53,6 +53,17 @@ useEffect(() => {
     window.removeEventListener("studioplayai:user-updated", onUserUpdated);
 }, []);
 
+useEffect(() => {
+  const openPricing = () => {
+    setIsAccountOpen(false);
+    setIsAdminOpen(false);
+    setIsPricingOpen(true);
+  };
+
+  window.addEventListener("studioplayai:open-pricing", openPricing);
+  return () => window.removeEventListener("studioplayai:open-pricing", openPricing);
+}, []);
+
 
 
    

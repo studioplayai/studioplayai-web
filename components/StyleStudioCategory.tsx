@@ -13,6 +13,8 @@ import IconMagic from './common/IconMagic';
 import IconStar from './common/IconStar';
 import IconLayers from './common/IconLayers';
 import { consumeCredits } from "../services/credits";
+import { refreshCurrentUserFromDB } from "../services/authService";
+
 
 
 type StyleCategory = 'professional' | 'creative' | 'humorous';
@@ -498,25 +500,40 @@ const StyleStudioCategory: React.FC<Props> = ({ onGenerate, isLoading, files, se
     , [selectedStyle]);
 
     const handleGenerate = async () => {
+        alert("SOURCE ✅ StyleStudioCategory.handleGenerate");
+
         console.log("✅ SOURCE = StyleStudioCategory.handleGenerate");
 
 
   console.log("🔥 handleGenerate clicked");
 
   const charge = await consumeCredits(1);
-  console.log("💳 charge result:", charge);
+console.log("💳 charge result:", charge);
 
-  if (!charge.ok) {
-    console.log("❌ charge failed reason:", charge.reason);
-    if (charge.reason === "no_credits") {
-      alert("אין לך קרדיטים. נא לרכוש קרדיטים.");
-      return;
-    }
-    alert("שגיאה בחיוב קרדיטים");
-    return;
+if (!charge.ok) {
+  console.log("❌ charge failed reason:", charge.reason);
+
+  if (charge.reason === "no_credits") {
+    window.dispatchEvent(new CustomEvent("studioplayai:open-pricing"));
+return;
+
   }
 
-  console.log("✅ credits charged. left:", (charge as any).creditsLeft ?? (charge as any).credits_left);
+  alert("שגיאה בחיוב קרדיטים");
+  return;
+}
+
+// 🔄 רענון משתמש מה־DB
+const updatedUser = await refreshCurrentUserFromDB();
+
+if (updatedUser) {
+  console.log("🔄 User refreshed, credits:", updatedUser.credits);
+}
+
+console.log(
+  "✅ credits charged. left:",
+  (charge as any).creditsLeft ?? (charge as any).credits_left
+);
 
 
   // המשך הקוד הקיים שלך:
