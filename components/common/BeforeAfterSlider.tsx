@@ -79,7 +79,7 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ beforeImage, afte
             <img
                 src={beforeImage}
                 alt="Before"
-                className="absolute inset-0 h-full w-full object-cover pointer-events-none grayscale opacity-50"
+                className="absolute inset-0 h-full w-full object-contain pointer-events-none grayscale opacity-50"
                 draggable={false}
             />
             
@@ -94,7 +94,7 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ beforeImage, afte
                 <img
                     src={afterImage}
                     alt="After"
-                    className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                    className="absolute inset-0 h-full w-full object-contain pointer-events-none"
                     draggable={false}
                 />
             </div>

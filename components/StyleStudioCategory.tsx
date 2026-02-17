@@ -500,7 +500,7 @@ const StyleStudioCategory: React.FC<Props> = ({ onGenerate, isLoading, files, se
     , [selectedStyle]);
 
     const handleGenerate = async () => {
-        alert("SOURCE ✅ StyleStudioCategory.handleGenerate");
+    
 
         console.log("✅ SOURCE = StyleStudioCategory.handleGenerate");
 

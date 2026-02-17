@@ -127,19 +127,19 @@ const BundleResultView: React.FC<BundleResultViewProps> = ({ bundle }) => {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Post (1:1)</label>
                     <div className="aspect-square overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-panel-light">
-                        {compositedImages.post && <img src={compositedImages.post} className="h-full w-full object-cover" alt="Post" />}
+                        {compositedImages.post && <img src={compositedImages.post} className="h-full w-full object-contain" alt="Post" />}
                     </div>
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Story (9:16)</label>
                     <div className="aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-panel-light">
-                        {compositedImages.story && <img src={compositedImages.story} className="h-full w-full object-cover" alt="Story" />}
+                        {compositedImages.story && <img src={compositedImages.story} className="h-full w-full object-contain" alt="Story" />}
                     </div>
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Cover (16:9)</label>
                     <div className="aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-panel-light">
-                       {compositedImages.cover && <img src={compositedImages.cover} className="h-full w-full object-cover" alt="Cover" />}
+                       {compositedImages.cover && <img src={compositedImages.cover} className="h-full w-full object-contain" alt="Cover" />}
                     </div>
                 </motion.div>
             </div>
