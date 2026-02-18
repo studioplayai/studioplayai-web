@@ -12,10 +12,6 @@ import IconPalette from './common/IconPalette';
 import IconMagic from './common/IconMagic';
 import IconStar from './common/IconStar';
 import IconLayers from './common/IconLayers';
-import { consumeCredits } from "../services/credits";
-import { refreshCurrentUserFromDB } from "../services/authService";
-
-
 
 type StyleCategory = 'professional' | 'creative' | 'humorous';
 
@@ -27,10 +23,16 @@ type StylePresetKey =
     | 'urban_style'
     | 'product_splash'
     | 'gourmet_food'
+    | 'pro_jewelry_macro'
+    | 'pro_skincare_ad'
+    | 'pro_real_estate'
+    | 'pro_food_flatlay'
     | 'artistic_ai' 
     | 'double_exposure'
     | 'holographic_glitch'
     | 'liquid_chrome'
+    | 'creative_fabric_flow'
+    | 'creative_food_levitation'
     | 'business_profile' 
     | 'social_media_look'
     | 'cinematic_drone'
@@ -115,13 +117,40 @@ const STYLE_PRESETS: StylePreset[] = [
         color: 'from-purple-500/20 to-pink-500/20'
     },
     { 
-        id: 'minimal_studio', 
+        id: 'pro_jewelry_macro',
         category: 'professional',
-        label: 'Minimal Studio', 
+        label: 'Luxury Jewelry',
+        icon: IconStar,
+        desc: 'צילום מאקרו יוקרתי לתכשיטים, עם דגש על ניצוץ יהלומים.',
+        prompt: 'luxury jewelry macro photography, dark moody lighting, brilliant diamond sparkles, cinematic lens flares, crisp focus on intricate details, high-end commercial aesthetic',
+        color: 'from-slate-300/20 to-gray-400/20'
+    },
+    { 
+        id: 'pro_skincare_ad',
+        category: 'professional',
+        label: 'Skincare Ad',
         icon: IconPalette,
-        desc: 'רקע נקי לחלוטין, תאורה אחידה ומינימליזם מודרני.',
-        prompt: 'pure minimalist studio, high-key lighting, solid neutral background, soft shadows, clean geometry, focus on form and facial features',
-        color: 'from-gray-300/20 to-gray-100/20'
+        desc: 'צילום מוצרי קוסמטיקה נקי ורענן, עם התזות מים ומרכיבים.',
+        prompt: 'high-end skincare product ad, clean minimalist composition, refreshing water splashes, natural ingredients in the background, soft studio lighting, pure and clinical aesthetic',
+        color: 'from-cyan-200/20 to-blue-300/20'
+    },
+    { 
+        id: 'pro_real_estate',
+        category: 'professional',
+        label: 'Architectural Digest',
+        icon: IconCamera,
+        desc: 'צילום חללי פנים בסגנון מגזין עיצוב, מואר, נקי ויוקרתי.',
+        prompt: 'Architectural Digest style interior photography, bright and airy space, natural light flooding through large windows, clean lines, modern luxury furniture, wide-angle lens perspective',
+        color: 'from-amber-200/20 to-yellow-300/20'
+    },
+    { 
+        id: 'pro_food_flatlay',
+        category: 'professional',
+        label: 'Foodie Flatlay',
+        icon: IconCamera,
+        desc: 'קומפוזיציית "פלאט ליי" מלמעלה, עם מרכיבים טריים וצבעוניות עשירה.',
+        prompt: 'vibrant foodie flatlay composition, top-down perspective, bright natural lighting, colorful fresh ingredients, textured surfaces, healthy and organic aesthetic',
+        color: 'from-lime-400/20 to-green-500/20'
     },
     {
         id: 'natural_beauty',
@@ -131,24 +160,6 @@ const STYLE_PRESETS: StylePreset[] = [
         desc: 'מראה טבעי ורענן עם תאורת "שעת הזהב" רכה ומחמיאה.',
         prompt: 'natural beauty portrait, golden hour soft light, authentic expression, clean and fresh look, high-end skincare ad style, minimal makeup, gentle focus',
         color: 'from-yellow-400/20 to-orange-300/20'
-    },
-    {
-        id: 'fashion_studio',
-        category: 'professional',
-        label: 'Fashion Studio',
-        icon: IconCamera,
-        desc: 'הפקת אופנה בסטודיו עם תאורה חדה, צבעים נועזים ורקע אחיד.',
-        prompt: 'high fashion studio shot, bold colors, solid color background, sharp lighting, confident pose, professional model look, e-commerce fashion style',
-        color: 'from-cyan-400/20 to-blue-500/20'
-    },
-    {
-        id: 'urban_style',
-        category: 'professional',
-        label: 'Urban Style',
-        icon: IconCamera,
-        desc: 'סטריט-סטייל אורבני עם אווירת עיר, גרפיטי וקונטרסט גבוה.',
-        prompt: 'urban streetwear fashion, city background, high contrast lighting, edgy style, graffiti wall, natural pose, modern and cool aesthetic',
-        color: 'from-slate-500/20 to-gray-700/20'
     },
     {
         id: 'product_splash',
@@ -164,11 +175,19 @@ const STYLE_PRESETS: StylePreset[] = [
         category: 'professional',
         label: 'Gourmet Food',
         icon: IconCamera,
-        desc: 'צילום אוכל מקצועי בסגנון מישלן, עם דגש על פרטים, טקסטורה וקיטור.',
+        desc: 'צילום אוכל מקצועי בסגנון מישלן, עם דגש על פרטים וטקסטורה.',
         prompt: 'professional gourmet food photography, michelin star plating, macro details, gentle steam, dark moody lighting, high-end restaurant aesthetic, crisp textures',
         color: 'from-orange-600/20 to-yellow-700/20'
     },
-
+    { 
+        id: 'minimal_studio', 
+        category: 'professional',
+        label: 'Minimal Studio', 
+        icon: IconPalette,
+        desc: 'רקע נקי לחלוטין, תאורה אחידה ומינימליזם מודרני.',
+        prompt: 'pure minimalist studio, high-key lighting, solid neutral background, soft shadows, clean geometry, focus on form and facial features',
+        color: 'from-gray-300/20 to-gray-100/20'
+    },
     // --- Creative ---
     { 
         id: 'cinematic_drone', 
@@ -198,20 +217,29 @@ const STYLE_PRESETS: StylePreset[] = [
         color: 'from-indigo-600/20 to-purple-400/20'
     },
     { 
-        id: 'nature_macro', 
+        id: 'creative_fabric_flow',
         category: 'creative',
-        label: 'Nature Macro', 
-        icon: IconPalette,
-        desc: 'תקריב קיצוני בטבע עם עומק שדה רדוד וטקסטורות אורגניות.',
-        prompt: 'nature macro cinematography, extreme close-up, organic textures, sunlight filtering through leaves, very shallow depth of field, dew drops, serene vibe',
-        color: 'from-green-600/20 to-emerald-400/20'
+        label: 'Flowing Fabric',
+        icon: IconLayers,
+        desc: 'תנועה קפואה של בדים באוויר, יוצר אפקט דרמטי ואמנותי.',
+        prompt: 'high-fashion shot with fabric flowing in the air, captured with high-speed photography, creating abstract shapes and dynamic motion, dramatic studio lighting',
+        color: 'from-rose-400/20 to-red-500/20'
+    },
+    { 
+        id: 'creative_food_levitation',
+        category: 'creative',
+        label: 'Levitating Food',
+        icon: IconMagic,
+        desc: 'מרכיבי מזון מרחפים באוויר בקומפוזיציה סוריאליסטית ונקייה.',
+        prompt: 'surreal food art, deconstructed ingredients levitating in mid-air against a solid color background, minimalist and artistic, high-speed photography style',
+        color: 'from-orange-400/20 to-amber-500/20'
     },
     {
         id: 'artistic_ai',
         category: 'creative',
         label: 'Artistic AI',
         icon: IconMagic,
-        desc: 'יצירת אמנות דיגיטלית בסגנון קונספט-ארט, עם פרטים עשירים וצבעוניות ייחודית.',
+        desc: 'יצירת אמנות דיגיטלית בסגנון קונספט-ארט, עם פרטים עשירים.',
         prompt: 'digital concept art painting, intricate details, vibrant and unique color palette, artistic style of Artgerm and Greg Rutkowski, trending on ArtStation, surreal and beautiful',
         color: 'from-teal-400/20 to-cyan-600/20'
     },
@@ -220,7 +248,7 @@ const STYLE_PRESETS: StylePreset[] = [
         category: 'creative',
         label: 'Double Exposure',
         icon: IconLayers,
-        desc: 'שילוב אמנותי של פורטרט ונוף (עיר/טבע) ליצירת קומפוזיציה פואטית.',
+        desc: 'שילוב אמנותי של פורטרט ונוף ליצירת קומפוזיציה פואטית.',
         prompt: 'cinematic double exposure effect, merging a portrait with a dramatic landscape (forest/cityscape), poetic and artistic, silhouette overlay, high contrast, fine art photography',
         color: 'from-slate-500/20 to-sky-700/20'
     },
@@ -499,53 +527,14 @@ const StyleStudioCategory: React.FC<Props> = ({ onGenerate, isLoading, files, se
         STYLE_PRESETS.find(p => p.id === selectedStyle) || STYLE_PRESETS[0]
     , [selectedStyle]);
 
-    const handleGenerate = async () => {
-    
-
-        console.log("✅ SOURCE = StyleStudioCategory.handleGenerate");
-
-
-  console.log("🔥 handleGenerate clicked");
-
-  const charge = await consumeCredits(1);
-console.log("💳 charge result:", charge);
-
-if (!charge.ok) {
-  console.log("❌ charge failed reason:", charge.reason);
-
-  if (charge.reason === "no_credits") {
-    window.dispatchEvent(new CustomEvent("studioplayai:open-pricing"));
-return;
-
-  }
-
-  alert("שגיאה בחיוב קרדיטים");
-  return;
-}
-
-// 🔄 רענון משתמש מה־DB
-const updatedUser = await refreshCurrentUserFromDB();
-
-if (updatedUser) {
-  console.log("🔄 User refreshed, credits:", updatedUser.credits);
-}
-
-console.log(
-  "✅ credits charged. left:",
-  (charge as any).creditsLeft ?? (charge as any).credits_left
-);
-
-
-  // המשך הקוד הקיים שלך:
-  const fullPrompt = `AI STYLE STUDIO TASK: ${activePreset.prompt}.
-INSTRUCTION: Maintain the exact facial identity, bone structure, and expression of all people in the provided images.
-Apply the '${activePreset.label}' style while keeping everyone recognizable.
-Final output must be a single high-quality image.`;
-
-  onGenerate(fullPrompt, { style_preset: selectedStyle }, files, "image");
-};
-
-
+    const handleGenerate = () => {
+        const fullPrompt = `AI STYLE STUDIO TASK: ${activePreset.prompt}. 
+        INSTRUCTION: Maintain the exact facial identity, bone structure, and expression of all people in the provided images. 
+        Apply the '${activePreset.label}' style while keeping everyone recognizable. 
+        Final output must be a single high-quality image.`;
+        
+        onGenerate(fullPrompt, { style_preset: selectedStyle }, files, 'image');
+    };
 
     return (
         <div className="flex flex-col h-full bg-panel-dark/30 rounded-2xl overflow-hidden" dir="rtl">
